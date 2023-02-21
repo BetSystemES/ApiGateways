@@ -1,4 +1,5 @@
-﻿using WebApiGateway.Mapper.ProfileService;
+﻿using WebApiGateway.Mapper.CashService;
+using WebApiGateway.Mapper.ProfileService;
 
 namespace WebApiGateway.Configuration
 {
@@ -10,6 +11,7 @@ namespace WebApiGateway.Configuration
             {
                 config.AddProfile<ProfileModelMap>();
                 config.AddProfile<DiscountModelMap>();
+                config.AddProfile<TransactionModelApiMap>();
             });
 
             return services;

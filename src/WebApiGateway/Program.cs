@@ -31,3 +31,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+namespace WebApiGateway
+{
+    public partial class Program { }
+}

@@ -6,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.Profiler;
 
-namespace WebApiGateway.Controllers.ProfileService
+namespace WebApiGateway.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -27,7 +27,7 @@ namespace WebApiGateway.Controllers.ProfileService
 
         // GET api/bonus/"guid"
         [HttpGet("{id}")]
-        [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
+        //[SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] string id)
         {
             var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>("ProfileGrpcClient");

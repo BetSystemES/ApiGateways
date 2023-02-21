@@ -5,7 +5,7 @@ using ProfileService.GRPC;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.Profiler;
 
-namespace WebApiGateway.Controllers.ProfileService
+namespace WebApiGateway.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

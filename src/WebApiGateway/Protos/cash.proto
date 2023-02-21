@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+option csharp_namespace = "CashService.GRPC";
+
+package cash;
+
+// The CashService definition.
+service Casher {
+
+  rpc GetTransactionsHistory (GetTransactionsHistoryRequest) returns (GetTransactionsHistoryResponce);
+  rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponce);
+  rpc Deposit (DepositRequest) returns (DepositResponce);
+  rpc Withdraw (WithdrawRequest) returns (WithdrawResponce);
+  rpc DepositRange (DepositRangeRequest) returns (DepositRangeResponce);
+  rpc WithdrawRange (WithdrawRangeRequest) returns (WithdrawRangeResponce);
+}
+
+
+message GetTransactionsHistoryRequest {
+	string profileid = 1;
+}
+message GetTransactionsHistoryResponce {
+	TransactionModel balance = 1;
+}
+
+message GetBalanceRequest {
+	string profileid = 1;
+}
+message GetBalanceResponce {
+	TransactionModel balance = 1;
+}
+
+message DepositRequest {
+	TransactionModel deposit = 1;
+}
+message DepositResponce {
+}
+
+message WithdrawRequest {
+	TransactionModel withdrawrequest = 1;
+}
+message WithdrawResponce {
+	TransactionModel withdrawresponce = 1;
+}
+
+message DepositRangeRequest {
+	repeated TransactionModel depositrangerequest = 1;
+}
+message DepositRangeResponce {
+}
+
+message WithdrawRangeRequest {
+	repeated TransactionModel withdrawrangerequest = 1;
+}
+message WithdrawRangeResponce {
+	repeated TransactionModel withdrawrangeresponce = 1;
+}
+
+
+message TransactionModel
+{
+	string profileid = 1;
+	repeated Transaction transactions = 2;
+}
+
+message Transaction
+{
+	string transactionid = 1; 
+	CashType cashtype = 2;
+	double amount = 3;
+}
+
+enum CashType
+{
+	CASH_TYPE_UNSPECIFIED = 0;
+	CASH_TYPE_CASH=1;
+	CASH_TYPE_BONUS=2;
+}

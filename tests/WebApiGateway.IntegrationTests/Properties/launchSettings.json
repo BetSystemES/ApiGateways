@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WebApiGateway.IntegrationTests": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

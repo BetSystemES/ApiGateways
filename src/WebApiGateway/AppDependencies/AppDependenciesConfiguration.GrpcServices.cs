@@ -1,5 +1,6 @@
 ﻿using WebApiGateway.Settings;
 using static ProfileService.GRPC.Profiler;
+using static CashService.GRPC.Casher;
 
 namespace WebApiGateway.AppDependencies
 {
@@ -9,7 +10,8 @@ namespace WebApiGateway.AppDependencies
             ServiceEndpointsSettings serviceEndpointsSettings)
         {
             services
-                .AddProfileClient(serviceEndpointsSettings);
+                .AddProfileClient(serviceEndpointsSettings)
+                .AddCashClient(serviceEndpointsSettings);
 
             return services;
         }
@@ -20,7 +22,16 @@ namespace WebApiGateway.AppDependencies
             var endpoint = serviceEndpointsSettings.ProfileService;
 
             return services
-                .AddGrcpServiceClient<ProfilerClient>("ProfileGrpcClient", endpoint);
+                .AddGrcpServiceClient<ProfilerClient>(ClientNames.ProfileClient, endpoint);
+        }
+
+        private static IServiceCollection AddCashClient(this IServiceCollection services,
+            ServiceEndpointsSettings serviceEndpointsSettings)
+        {
+            var endpoint = serviceEndpointsSettings.CashService;
+
+            return services
+                .AddGrcpServiceClient<CasherClient>(ClientNames.CashClient, endpoint);
         }
 
         private static IServiceCollection AddGrcpServiceClient<TClient>(this IServiceCollection services, string clientName, string? endpoint) where TClient : class
