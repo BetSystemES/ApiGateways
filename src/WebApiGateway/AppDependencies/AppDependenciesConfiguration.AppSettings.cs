@@ -16,7 +16,7 @@ namespace WebApiGateway.AppDependencies
             webApplicationBuilder.Services.AddServiceEndpoints(webApplicationBuilder.Configuration);
 
             return webApplicationBuilder.Configuration
-                                        .GetRequiredSection("ServiceEndpoints")
+                                        .GetRequiredSection("ServiceEndpointsSettings")
                                         .Get<ServiceEndpointsSettings>();
         }
 
@@ -24,7 +24,7 @@ namespace WebApiGateway.AppDependencies
             IConfiguration configuration)
         {
             services
-                .Configure<ServiceEndpointsSettings>(configuration.GetSection("ServiceEndpoints"));
+                .Configure<ServiceEndpointsSettings>(configuration.GetSection("ServiceEndpointsSettings"));
         }
     }
 }
