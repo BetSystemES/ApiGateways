@@ -31,7 +31,7 @@ namespace WebApiGateway.Controllers
         
         public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] string id)
         {
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetTransactionsHistoryRequest()
@@ -50,7 +50,7 @@ namespace WebApiGateway.Controllers
         [HttpGet("{id}", Name = nameof(GetBalance)) ]
         public async Task<ActionResult<TransactionModelApi>> GetBalance([FromRoute] string id)
         {
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetBalanceRequest()
@@ -69,12 +69,12 @@ namespace WebApiGateway.Controllers
         [HttpPost("deposit", Name = nameof(Deposit))]
         public async Task<ActionResult> Deposit([FromBody] TransactionModelApi transactionModelApi)
         {
-            if (transactionModelApi == null)
+            if (transactionModelApi is null)
             {
                 return BadRequest();
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<TransactionModelApi ,TransactionModel >(transactionModelApi);
@@ -92,12 +92,12 @@ namespace WebApiGateway.Controllers
         [HttpPost("withdraw", Name = nameof(Withdraw))]
         public async Task<ActionResult<TransactionModelApi>> Withdraw([FromBody] TransactionModelApi transactionModelApi)
         {
-            if (transactionModelApi == null)
+            if (transactionModelApi is null)
             {
                 return BadRequest();
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<TransactionModelApi, TransactionModel>(transactionModelApi);
@@ -118,12 +118,12 @@ namespace WebApiGateway.Controllers
         [HttpPost("depositrange", Name = nameof(DepositRange))]
         public async Task<ActionResult> DepositRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
-            if (transactionModelApis == null)
+            if (transactionModelApis is null)
             {
                 return BadRequest();
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map< IEnumerable<TransactionModelApi>, IEnumerable<TransactionModel>>(transactionModelApis);
@@ -139,12 +139,12 @@ namespace WebApiGateway.Controllers
         [HttpPost("withdrawrange", Name = nameof(WithdrawRange))]
         public async Task<ActionResult<IEnumerable<TransactionModelApi>>> WithdrawRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
-            if (transactionModelApis == null)
+            if (transactionModelApis is null)
             {
                 return BadRequest();
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(ClientNames.CashClient);
+            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<IEnumerable<TransactionModelApi>, List<TransactionModel>>(transactionModelApis);

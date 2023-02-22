@@ -3,6 +3,7 @@ using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
+using WebApiGateway.Filters;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.Profiler;
 
@@ -30,7 +31,7 @@ namespace WebApiGateway.Controllers
         //[SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] string id)
         {
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>("ProfileGrpcClient");
+            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetDiscountsRequest()
@@ -53,12 +54,12 @@ namespace WebApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DiscountModel discountModel)
         {
-            if (discountModel == null)
+            if (discountModel is null)
             {
                 return BadRequest();
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>("ProfileGrpcClient");
+           var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);
@@ -77,12 +78,12 @@ namespace WebApiGateway.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] DiscountModel discountModel)
         {
-            if (discountModel == null)
+            if (discountModel is null)
             {
                 return BadRequest();
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>("ProfileGrpcClient");
+           var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);

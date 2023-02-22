@@ -10,31 +10,27 @@ namespace WebApiGateway.AppDependencies
             ServiceEndpointsSettings serviceEndpointsSettings)
         {
             services
-                .AddProfileClient(serviceEndpointsSettings)
-                .AddCashClient(serviceEndpointsSettings);
+                .AddGrpcClient<ProfilerClient>(serviceEndpointsSettings)
+                .AddGrpcClient<CasherClient>(serviceEndpointsSettings);
 
             return services;
         }
 
-        private static IServiceCollection AddProfileClient(this IServiceCollection services,
-            ServiceEndpointsSettings serviceEndpointsSettings)
+        private static IServiceCollection AddGrpcClient<T>(this IServiceCollection services,
+            ServiceEndpointsSettings serviceEndpointsSettings) where T : class
         {
-            var endpoint = serviceEndpointsSettings.ProfileService;
+            var serviceName = typeof(T).Name;
+
+            var serviceEndpoint = serviceEndpointsSettings?.ServiceEndpoints
+                .FirstOrDefault(x => x.Name.Equals(serviceName));
+
+            ArgumentNullException.ThrowIfNull(serviceEndpoint, nameof(serviceEndpoint));
 
             return services
-                .AddGrcpServiceClient<ProfilerClient>(ClientNames.ProfileClient, endpoint);
+                .AddGrcpServiceClient<T>(serviceName, serviceEndpoint.Url);
         }
 
-        private static IServiceCollection AddCashClient(this IServiceCollection services,
-            ServiceEndpointsSettings serviceEndpointsSettings)
-        {
-            var endpoint = serviceEndpointsSettings.CashService;
-
-            return services
-                .AddGrcpServiceClient<CasherClient>(ClientNames.CashClient, endpoint);
-        }
-
-        private static IServiceCollection AddGrcpServiceClient<TClient>(this IServiceCollection services, string clientName, string? endpoint) where TClient : class
+        private static IServiceCollection AddGrcpServiceClient<TClient>(this IServiceCollection services, string clientName, string endpoint) where TClient : class
         {
             return services
                 .AddGrpcClient<TClient>(clientName, options =>
