@@ -3,6 +3,7 @@ using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using WebApiGateway.Filters;
+using WebApiGateway.Middleware;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.Profiler;
 
@@ -54,7 +55,14 @@ namespace WebApiGateway.Controllers
         {
             if (profileModel is null)
             {
-                return BadRequest();
+                //return BadRequest();
+                var responseObj = new ExceptionObject()
+                {
+                    StatusCode = 400,
+                    Successful = false,
+                    Error = "Model is null",
+                };
+                throw new FilterException(responseObj);
             }
 
             var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));

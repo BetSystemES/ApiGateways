@@ -2,6 +2,7 @@ using WebApiGateway.AppDependencies;
 using WebApiGateway.Configuration;
 using WebApiGateway.Configuration.SeriLog;
 using WebApiGateway.Filters;
+using WebApiGateway.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +12,10 @@ builder.ConfigureDependencies();
 
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<InputNullValidationFilter>();
-    options.Filters.Add<ValidateModelFilter>();
+    //options.Filters.Add<InputNullValidationFilter>();
+    //options.Filters.Add<InputModelValidationFilter>();
+    options.Filters.Add<InputNullValidationFilter2>();
+    options.Filters.Add<InputModelValidationFilter2>();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -33,6 +36,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.MapControllers();
 

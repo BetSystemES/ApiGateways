@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Reflection;
+using static WebApiGateway.Filters.Support;
+
 
 namespace WebApiGateway.Filters
 {
@@ -28,24 +28,5 @@ namespace WebApiGateway.Filters
 
         public void OnActionExecuted(ActionExecutedContext context)
         { }
-
-        bool IsAnyNullOrEmpty(object myObject)
-        {
-            foreach (PropertyInfo pi in myObject.GetType().GetProperties())
-            {
-                if (pi.PropertyType == typeof(string))
-                {
-                    string value = (string)pi.GetValue(myObject);
-                    if (string.IsNullOrEmpty(value))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
     }
-
-   
 }
