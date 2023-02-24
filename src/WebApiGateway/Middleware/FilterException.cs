@@ -2,11 +2,16 @@
 {
     public class FilterException : Exception
     {
-        public ExceptionObject ExceptionObject;
-        public FilterException(ExceptionObject exceptionObject)
-            : base(exceptionObject.Error)
+        public ExceptionObject ExceptionObject { get; set; }
+        
+        public FilterException(string exceptionString) : base(exceptionString)
         {
-            ExceptionObject = exceptionObject;
+            ExceptionObject = new ExceptionObject()
+            {
+                StatusCode = 400,
+                Successful = false,
+                Error = exceptionString,
+            };
         }
     }
 

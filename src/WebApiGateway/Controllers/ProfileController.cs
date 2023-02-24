@@ -55,14 +55,7 @@ namespace WebApiGateway.Controllers
         {
             if (profileModel is null)
             {
-                //return BadRequest();
-                var responseObj = new ExceptionObject()
-                {
-                    StatusCode = 400,
-                    Successful = false,
-                    Error = "Model is null",
-                };
-                throw new FilterException(responseObj);
+                throw new FilterException("Model is null");
             }
 
             var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
@@ -87,7 +80,7 @@ namespace WebApiGateway.Controllers
         {
             if (profileModel is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
             var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));

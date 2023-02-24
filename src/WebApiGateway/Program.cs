@@ -12,10 +12,8 @@ builder.ConfigureDependencies();
 
 builder.Services.AddControllers(options =>
 {
-    //options.Filters.Add<InputNullValidationFilter>();
-    //options.Filters.Add<InputModelValidationFilter>();
-    options.Filters.Add<InputNullValidationFilter2>();
-    options.Filters.Add<InputModelValidationFilter2>();
+    options.Filters.Add<InputNullValidationFilter>();
+    options.Filters.Add<InputModelValidationFilter>();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +35,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
+app.ConfigureExceptionMiddleware();
 
 app.MapControllers();
 
