@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
+using WebApiGateway.Middleware;
 
 namespace WebApiGateway.Filters
 {
@@ -9,17 +10,7 @@ namespace WebApiGateway.Filters
         {
             if (!context.ModelState.IsValid)
             {
-                var responseObj = new
-                {
-                    successful = false,
-                    error = "The input is not valid",
-                };
-
-                // setting the result shortcuts the pipeline, so the action is never executed
-                context.Result = new JsonResult(responseObj)
-                {
-                    StatusCode = 400
-                };
+                throw new FilterException("The input is not valid");
             }
         }
 

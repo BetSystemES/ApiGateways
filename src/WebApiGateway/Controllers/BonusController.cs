@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Filters;
+using WebApiGateway.Middleware;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.Profiler;
 
@@ -56,10 +57,10 @@ namespace WebApiGateway.Controllers
         {
             if (discountModel is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
-           var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);
@@ -80,10 +81,10 @@ namespace WebApiGateway.Controllers
         {
             if (discountModel is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
-           var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);

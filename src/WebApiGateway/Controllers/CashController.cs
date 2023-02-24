@@ -4,6 +4,7 @@ using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.AppDependencies;
+using WebApiGateway.Middleware;
 using WebApiGateway.Models.CashService;
 using static CashService.GRPC.Casher;
 
@@ -71,7 +72,7 @@ namespace WebApiGateway.Controllers
         {
             if (transactionModelApi is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
             var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
@@ -94,7 +95,7 @@ namespace WebApiGateway.Controllers
         {
             if (transactionModelApi is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
             var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
@@ -120,7 +121,7 @@ namespace WebApiGateway.Controllers
         {
             if (transactionModelApis is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
             var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
@@ -141,7 +142,7 @@ namespace WebApiGateway.Controllers
         {
             if (transactionModelApis is null)
             {
-                return BadRequest();
+                throw new FilterException("Model is null");
             }
 
             var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
