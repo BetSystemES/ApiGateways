@@ -17,6 +17,8 @@ namespace WebApiGateway.Middleware
                     {
                         switch (contextFeature.Error)
                         {
+                            // TODO: Filter exception is no longer needed (BadRequest response is handling in ValidateModelFilter).
+                            // Here can be NotFoundException, ConflictException, FluentValidationException and etc.
                             case FilterException filterException:
 
                                 context.Response.StatusCode = filterException.ExceptionObject.StatusCode;

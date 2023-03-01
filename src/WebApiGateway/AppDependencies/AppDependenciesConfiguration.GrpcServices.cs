@@ -30,6 +30,7 @@ namespace WebApiGateway.AppDependencies
                 .AddGrcpServiceClient<T>(serviceName, serviceEndpoint.Url);
         }
 
+        // TODO: typo in AddGrcpServiceClient (Grcp should be replaced with Grpc)
         private static IServiceCollection AddGrcpServiceClient<TClient>(this IServiceCollection services, string clientName, string endpoint) where TClient : class
         {
             return services

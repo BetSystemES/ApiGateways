@@ -3,6 +3,7 @@ using WebApiGateway.Mapper.ProfileService;
 
 namespace WebApiGateway.Configuration
 {
+    // TODO: remove partial
     public static partial class AutoMapperConfiguration
     {
         public static IServiceCollection AddAutoMapConfig(this IServiceCollection services)

@@ -1,5 +1,6 @@
 ﻿namespace WebApiGateway.Middleware
 {
+    // TODO: Filter exception can be removed
     public class FilterException : Exception
     {
         public ExceptionObject ExceptionObject { get; set; }
@@ -15,6 +16,7 @@
         }
     }
 
+    // TODO: ExceptionObject can be removed
     public class ExceptionObject
     {
         public int StatusCode { get; set; }

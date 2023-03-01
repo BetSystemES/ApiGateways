@@ -2,6 +2,7 @@
 using CashService.GRPC;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
+// TODO: remove unused/sort usings
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.AppDependencies;
 using WebApiGateway.Middleware;
@@ -11,6 +12,7 @@ using static CashService.GRPC.Casher;
 
 namespace WebApiGateway.Controllers
 {
+    // TODO: remove all unnecessary empty lines (make file clean and pretty)
     [ApiController]
     [Route("api/[controller]")]
     public class CashController : ControllerBase
@@ -70,6 +72,7 @@ namespace WebApiGateway.Controllers
         [HttpPost("deposit", Name = nameof(Deposit))]
         public async Task<ActionResult> Deposit([FromBody] TransactionModelApi transactionModelApi)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (transactionModelApi is null)
             {
                 throw new FilterException("Model is null");
@@ -85,6 +88,7 @@ namespace WebApiGateway.Controllers
                 Deposit = requestModel
             };
 
+            // TODO: remove unused variable result
             var result = await cashClient.DepositAsync(request, cancellationToken: token);
 
             return Ok();
@@ -93,6 +97,7 @@ namespace WebApiGateway.Controllers
         [HttpPost("withdraw", Name = nameof(Withdraw))]
         public async Task<ActionResult<TransactionModelApi>> Withdraw([FromBody] TransactionModelApi transactionModelApi)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (transactionModelApi is null)
             {
                 throw new FilterException("Model is null");
@@ -119,6 +124,7 @@ namespace WebApiGateway.Controllers
         [HttpPost("depositrange", Name = nameof(DepositRange))]
         public async Task<ActionResult> DepositRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (transactionModelApis is null)
             {
                 throw new FilterException("Model is null");
@@ -132,6 +138,7 @@ namespace WebApiGateway.Controllers
             var request = new DepositRangeRequest();
             request.Depositrangerequest.AddRange(requestModel);
 
+            // TODO: remove unused variable result
             var result = await cashClient.DepositRangeAsync(request, cancellationToken: token);
 
             return Ok();
@@ -140,6 +147,7 @@ namespace WebApiGateway.Controllers
         [HttpPost("withdrawrange", Name = nameof(WithdrawRange))]
         public async Task<ActionResult<IEnumerable<TransactionModelApi>>> WithdrawRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (transactionModelApis is null)
             {
                 throw new FilterException("Model is null");

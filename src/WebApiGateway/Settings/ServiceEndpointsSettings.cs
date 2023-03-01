@@ -1,5 +1,7 @@
-﻿namespace WebApiGateway.Settings
+﻿// TODO: remove all unnecessary empty lines (make file clean and pretty)
+namespace WebApiGateway.Settings
 {
+    // TODO: Create multiple files for all classes and enums. Each class and enum should have own file
     /// <summary>
     /// Service endpoints
     /// </summary>
@@ -8,6 +10,7 @@
         public List<ServiceEndpoint> ServiceEndpoints { get; set; }
     }
 
+    // TODO: Create multiple files for all classes and enums. Each class and enum should have own file
     public class ServiceEndpoint
     {
         public string? Name { get; set; }

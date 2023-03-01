@@ -4,6 +4,7 @@ using WebApiGateway.Middleware;
 
 namespace WebApiGateway.Filters
 {
+    // TODO: Remove this Filter. Use ValidateModelFilter as global filter
     public class InputModelValidationFilter : Attribute, IActionFilter
     {
         public void OnActionExecuting(ActionExecutingContext context)

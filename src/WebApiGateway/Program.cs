@@ -24,6 +24,7 @@ builder.Services.AddAutoMapConfig();
 
 var app = builder.Build();
 
+// TODO: Add additional EnableSwagger option in AppSettings and replace IsDevelopment
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

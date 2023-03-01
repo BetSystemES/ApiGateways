@@ -3,6 +3,7 @@
 using WebApiGateway.Middleware;
 using static WebApiGateway.Filters.Support;
 
+// TODO: this filter should be removed. Use ValidateModelFilter as global filter.
 namespace WebApiGateway.Filters
 {
     public class InputNullValidationFilter : Attribute, IActionFilter

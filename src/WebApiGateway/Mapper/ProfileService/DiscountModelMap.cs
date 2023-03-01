@@ -17,6 +17,7 @@ namespace WebApiGateway.Mapper.ProfileService
             CreateMap<DiscountModel, Discount>()
                 .ReverseMap();
 
+            // TODO: this one can be removed. It is unnecessary
             CreateMap<IEnumerable<DiscountModel>, IEnumerable<Discount>>();
         }
     }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
+// TODO: remove unused/sort usings
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Filters;
 using WebApiGateway.Middleware;
@@ -10,6 +11,7 @@ using static ProfileService.GRPC.Profiler;
 
 namespace WebApiGateway.Controllers
 {
+    // TODO: remove all unnecessary empty lines (make file clean and pretty)
     [ApiController]
     [Route("api/[controller]")]
     public class BonusController : ControllerBase
@@ -55,6 +57,7 @@ namespace WebApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DiscountModel discountModel)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (discountModel is null)
             {
                 throw new FilterException("Model is null");
@@ -70,6 +73,7 @@ namespace WebApiGateway.Controllers
                 Discount = requestModel
             };
 
+            // TODO: remove unused variable result
             var result = await profileClient.AddDiscountAsync(request, cancellationToken: token);
 
             return Ok();
@@ -79,6 +83,7 @@ namespace WebApiGateway.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] DiscountModel discountModel)
         {
+            // TODO: remove this check and throw. Exception should be thrown in global model state filter
             if (discountModel is null)
             {
                 throw new FilterException("Model is null");
@@ -94,6 +99,7 @@ namespace WebApiGateway.Controllers
                 Discount = requestModel
             };
 
+            // TODO: remove unused variable result
             var result = await profileClient.UpdateDiscountAsync(request, cancellationToken: token);
 
             return Ok();
