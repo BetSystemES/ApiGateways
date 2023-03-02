@@ -5,7 +5,7 @@ option csharp_namespace = "CashService.GRPC";
 package cash;
 
 // The CashService definition.
-service Casher {
+service CashService {
 
   rpc GetTransactionsHistory (GetTransactionsHistoryRequest) returns (GetTransactionsHistoryResponce);
   rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponce);

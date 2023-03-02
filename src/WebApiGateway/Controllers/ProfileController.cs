@@ -5,7 +5,7 @@ using ProfileService.GRPC;
 using WebApiGateway.Filters;
 using WebApiGateway.Middleware;
 using WebApiGateway.Models.ProfileService;
-using static ProfileService.GRPC.Profiler;
+using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
@@ -31,7 +31,7 @@ namespace WebApiGateway.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProfileModel>> Get([FromRoute] string id)
         {
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetPersonalDataByIdRequest()
@@ -60,7 +60,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<ProfileModel, PersonalProfile>(profileModel);
@@ -88,7 +88,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<ProfileModel, PersonalProfile>(profileModel);

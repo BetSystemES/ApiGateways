@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.AppDependencies;
 using WebApiGateway.Middleware;
 using WebApiGateway.Models.CashService;
-using static CashService.GRPC.Casher;
+using static CashService.GRPC.CashService;
 
 
 namespace WebApiGateway.Controllers
@@ -34,7 +34,7 @@ namespace WebApiGateway.Controllers
         
         public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] string id)
         {
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetTransactionsHistoryRequest()
@@ -53,7 +53,7 @@ namespace WebApiGateway.Controllers
         [HttpGet("{id}", Name = nameof(GetBalance)) ]
         public async Task<ActionResult<TransactionModelApi>> GetBalance([FromRoute] string id)
         {
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetBalanceRequest()
@@ -78,7 +78,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<TransactionModelApi ,TransactionModel >(transactionModelApi);
@@ -103,7 +103,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<TransactionModelApi, TransactionModel>(transactionModelApi);
@@ -130,7 +130,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map< IEnumerable<TransactionModelApi>, IEnumerable<TransactionModel>>(transactionModelApis);
@@ -153,7 +153,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var cashClient = _grpcClientFactory.CreateClient<CasherClient>(nameof(CasherClient));
+            var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<IEnumerable<TransactionModelApi>, List<TransactionModel>>(transactionModelApis);

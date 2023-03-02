@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Filters;
 using WebApiGateway.Middleware;
 using WebApiGateway.Models.ProfileService;
-using static ProfileService.GRPC.Profiler;
+using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
@@ -34,7 +34,7 @@ namespace WebApiGateway.Controllers
         //[SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] string id)
         {
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetDiscountsRequest()
@@ -63,7 +63,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);
@@ -89,7 +89,7 @@ namespace WebApiGateway.Controllers
                 throw new FilterException("Model is null");
             }
 
-            var profileClient = _grpcClientFactory.CreateClient<ProfilerClient>(nameof(ProfilerClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);
