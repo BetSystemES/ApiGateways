@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.SecurityTokenService;
 
 namespace WebApiGateway.Middleware
 {
@@ -17,12 +19,10 @@ namespace WebApiGateway.Middleware
                     {
                         switch (contextFeature.Error)
                         {
-                            // TODO: Filter exception is no longer needed (BadRequest response is handling in ValidateModelFilter).
                             // Here can be NotFoundException, ConflictException, FluentValidationException and etc.
-                            case FilterException filterException:
-
-                                context.Response.StatusCode = filterException.ExceptionObject.StatusCode;
-                                await context.Response.WriteAsJsonAsync(filterException.ExceptionObject);
+                            case BadRequestException _:
+                                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                                await context.Response.WriteAsJsonAsync(contextFeature.Error.Message);
                                 break;
                         }
                     }

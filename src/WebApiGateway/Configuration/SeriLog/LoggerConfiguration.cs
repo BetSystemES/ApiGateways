@@ -11,8 +11,7 @@ namespace WebApiGateway.Configuration.SeriLog
         /// </returns>
         public static WebApplicationBuilder AddSerialLogger(this WebApplicationBuilder appBuilder)
         {
-            // TODO: replace serviceProvider with "_"
-            appBuilder.Host.UseSerilog((_, serviceProvider, config) =>
+            appBuilder.Host.UseSerilog((_, _, config) =>
             {
                 config = config.WriteTo.Console();
                 config = appBuilder.Environment.IsDevelopment()

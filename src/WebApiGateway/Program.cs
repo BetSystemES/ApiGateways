@@ -12,8 +12,7 @@ builder.ConfigureDependencies();
 
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<InputNullValidationFilter>();
-    options.Filters.Add<InputModelValidationFilter>();
+    options.Filters.Add<ValidateModelFilter>();
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -24,13 +23,8 @@ builder.Services.AddAutoMapConfig();
 
 var app = builder.Build();
 
-// TODO: Add additional EnableSwagger option in AppSettings and replace IsDevelopment
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.SwaggerConfig();
 
 app.UseHttpsRedirection();
 

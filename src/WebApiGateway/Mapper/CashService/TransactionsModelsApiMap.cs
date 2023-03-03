@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CashService.GRPC;
 using WebApiGateway.Models.CashService;
+using WebApiGateway.Models.CashService.Enums;
 
 namespace WebApiGateway.Mapper.CashService
 {

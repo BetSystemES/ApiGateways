@@ -2,14 +2,11 @@ using AutoMapper;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
-using WebApiGateway.Filters;
-using WebApiGateway.Middleware;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
-    // TODO: remove all unnecessary empty lines (make file clean and pretty)
     [ApiController]
     [Route("api/[controller]")]
     public class ProfileController : ControllerBase
@@ -25,7 +22,6 @@ namespace WebApiGateway.Controllers
             _grpcClientFactory = grpcClientFactory;
             _mapper = mapper;
         }
-
 
         // GET api/profile/"guid"
         [HttpGet("{id}")]
@@ -54,12 +50,6 @@ namespace WebApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ProfileModel profileModel)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (profileModel is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
@@ -70,24 +60,15 @@ namespace WebApiGateway.Controllers
                 Personalprofile = requestModel
             };
 
-            // TODO: remove unused variable result
             var result = await profileClient.AddPersonalDataAsync(request, cancellationToken: token);
 
-            return Ok();
+            return Ok(result);
         }
 
         // PUT api/profile/
         [HttpPut]
-        // TODO: remove Validate Model Filter. Global Filter should check Model State.
-        [ValidateModelFilter]
         public async Task<ActionResult> Put([FromBody] ProfileModel profileModel)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (profileModel is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
@@ -98,13 +79,9 @@ namespace WebApiGateway.Controllers
                 Personalprofile = requestModel
             };
 
-            // TODO: remove unused variable result
             var result = await profileClient.UpdatePersonalDataAsync(request, cancellationToken: token);
 
-            return Ok();
+            return Ok(result);
         }
-
-
     }
-
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ProfileService.GRPC;
 using WebApiGateway.Models.ProfileService;
+using WebApiGateway.Models.ProfileService.Enums;
 
 namespace WebApiGateway.Mapper.ProfileService
 {
@@ -16,9 +17,6 @@ namespace WebApiGateway.Mapper.ProfileService
 
             CreateMap<DiscountModel, Discount>()
                 .ReverseMap();
-
-            // TODO: this one can be removed. It is unnecessary
-            CreateMap<IEnumerable<DiscountModel>, IEnumerable<Discount>>();
         }
     }
 }

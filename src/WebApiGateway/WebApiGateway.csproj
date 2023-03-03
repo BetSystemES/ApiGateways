@@ -23,6 +23,7 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.45.0" />
 		<PackageReference Include="Grpc.Net.ClientFactory" Version="2.47.0" />
+		<PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
 		<PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="3.1.0" />

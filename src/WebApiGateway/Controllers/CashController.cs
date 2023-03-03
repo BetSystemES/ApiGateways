@@ -2,17 +2,11 @@
 using CashService.GRPC;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
-// TODO: remove unused/sort usings
-using Swashbuckle.AspNetCore.Annotations;
-using WebApiGateway.AppDependencies;
-using WebApiGateway.Middleware;
 using WebApiGateway.Models.CashService;
 using static CashService.GRPC.CashService;
 
-
 namespace WebApiGateway.Controllers
 {
-    // TODO: remove all unnecessary empty lines (make file clean and pretty)
     [ApiController]
     [Route("api/[controller]")]
     public class CashController : ControllerBase
@@ -29,9 +23,7 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet("{id}")]
         [HttpGet("{id}/transactions", Name = nameof(GetTransactionsHistory))]
-        
         public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] string id)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
@@ -39,7 +31,7 @@ namespace WebApiGateway.Controllers
 
             var request = new GetTransactionsHistoryRequest()
             {
-               Profileid = id
+               ProfileId = id
             };
 
             var result = await cashClient.GetTransactionsHistoryAsync(request, cancellationToken: token);
@@ -58,7 +50,7 @@ namespace WebApiGateway.Controllers
 
             var request = new GetBalanceRequest()
             {
-                Profileid = id
+                ProfileId = id
             };
 
             var result = await cashClient.GetBalanceAsync(request, cancellationToken: token);
@@ -72,12 +64,6 @@ namespace WebApiGateway.Controllers
         [HttpPost("deposit", Name = nameof(Deposit))]
         public async Task<ActionResult> Deposit([FromBody] TransactionModelApi transactionModelApi)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (transactionModelApi is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
@@ -88,21 +74,14 @@ namespace WebApiGateway.Controllers
                 Deposit = requestModel
             };
 
-            // TODO: remove unused variable result
             var result = await cashClient.DepositAsync(request, cancellationToken: token);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("withdraw", Name = nameof(Withdraw))]
         public async Task<ActionResult<TransactionModelApi>> Withdraw([FromBody] TransactionModelApi transactionModelApi)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (transactionModelApi is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
@@ -115,7 +94,7 @@ namespace WebApiGateway.Controllers
 
             var result = await cashClient.WithdrawAsync(request, cancellationToken: token);
 
-            var resultModel = _mapper.Map<TransactionModel, TransactionModelApi>(result.Withdrawresponce);
+            var resultModel = _mapper.Map<TransactionModel, TransactionModelApi>(result.Withdrawresponse);
 
             return Ok(resultModel);
         }
@@ -124,50 +103,35 @@ namespace WebApiGateway.Controllers
         [HttpPost("depositrange", Name = nameof(DepositRange))]
         public async Task<ActionResult> DepositRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (transactionModelApis is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map< IEnumerable<TransactionModelApi>, IEnumerable<TransactionModel>>(transactionModelApis);
 
             var request = new DepositRangeRequest();
-            request.Depositrangerequest.AddRange(requestModel);
+            request.DepositRangeRequests.AddRange(requestModel);
 
-            // TODO: remove unused variable result
             var result = await cashClient.DepositRangeAsync(request, cancellationToken: token);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPost("withdrawrange", Name = nameof(WithdrawRange))]
         public async Task<ActionResult<IEnumerable<TransactionModelApi>>> WithdrawRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
-            // TODO: remove this check and throw. Exception should be thrown in global model state filter
-            if (transactionModelApis is null)
-            {
-                throw new FilterException("Model is null");
-            }
-
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<IEnumerable<TransactionModelApi>, List<TransactionModel>>(transactionModelApis);
 
             var request = new WithdrawRangeRequest();
-            request.Withdrawrangerequest.AddRange(requestModel);
+            request.WithdrawRangeRequests.AddRange(requestModel);
 
             var result = await cashClient.WithdrawRangeAsync(request, cancellationToken: token);
 
-            var resultModel = _mapper.Map<IEnumerable<TransactionModel>, List<TransactionModelApi>>(result.Withdrawrangeresponce);
+            var resultModel = _mapper.Map<IEnumerable<TransactionModel>, List<TransactionModelApi>>(result.WithdrawRangeResponses);
 
             return Ok(resultModel);
         }
-
     }
-
 }

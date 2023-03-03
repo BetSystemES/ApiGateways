@@ -27,11 +27,10 @@ namespace WebApiGateway.AppDependencies
             ArgumentNullException.ThrowIfNull(serviceEndpoint, nameof(serviceEndpoint));
 
             return services
-                .AddGrcpServiceClient<T>(serviceName, serviceEndpoint.Url);
+                .AddGrpcServiceClient<T>(serviceName, serviceEndpoint.Url);
         }
 
-        // TODO: typo in AddGrcpServiceClient (Grcp should be replaced with Grpc)
-        private static IServiceCollection AddGrcpServiceClient<TClient>(this IServiceCollection services, string clientName, string endpoint) where TClient : class
+        private static IServiceCollection AddGrpcServiceClient<TClient>(this IServiceCollection services, string clientName, string endpoint) where TClient : class
         {
             return services
                 .AddGrpcClient<TClient>(clientName, options =>
