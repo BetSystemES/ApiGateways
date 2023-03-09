@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "AuthService.Grpc";
+
+package auth_service;
+
+service AuthService {
+  rpc Authenticate(AuthenticateRequest)
+    returns (AuthenticateResponse);
+  rpc Refresh(RefreshRequest)
+    returns (RefreshResponse);
+
+  rpc GetUser(GetUserRequest)
+    returns (GetUserResponse);
+  rpc CreateUser(CreateUserRequest)
+    returns (CreateUserResponse);
+  rpc DeleteUser(DeleteUserRequest)
+    returns (DeleteUserResponse);
+}
+
+message AuthenticateRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthenticateResponse {
+  Token token = 1;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+
+message RefreshResponse {
+  Token token = 1;
+}
+
+message GetUserRequest {
+  string user_id = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+}
+
+message CreateUserRequest {
+  string email = 1;
+  string password = 2;
+  repeated string roles = 3;
+}
+
+message CreateUserResponse {
+  User user = 1;
+}
+
+message DeleteUserRequest {
+  string user_id = 1;
+}
+
+message DeleteUserResponse {
+}
+
+message Token {
+  string access_token = 1;
+  string refresh_token = 2;
+  string type = 3;
+  .google.protobuf.Timestamp issued_at_utc = 4;
+  .google.protobuf.Timestamp jwt_token_expires_at_utc = 5;
+  .google.protobuf.Timestamp refresh_token_expires_at_utc = 6;
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  bool is_locked = 3;
+}

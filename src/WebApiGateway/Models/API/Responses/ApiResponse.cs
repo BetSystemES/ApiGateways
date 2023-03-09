@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace WebApiGateway.Responses
+namespace WebApiGateway.Models.API.Responses
 {
     public class ApiResponse : BasicApiResponse
     {

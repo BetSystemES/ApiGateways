@@ -1,4 +1,4 @@
-﻿namespace WebApiGateway.Responses
+﻿namespace WebApiGateway.Models.API.Responses
 {
     public class BasicApiResponse
     {

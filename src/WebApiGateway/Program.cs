@@ -1,14 +1,17 @@
-using WebApiGateway.AppDependencies;
+﻿using WebApiGateway.AppDependencies;
 using WebApiGateway.Configuration;
-using WebApiGateway.Configuration.SeriLog;
+using WebApiGateway.Configuration.Jwt;
 using WebApiGateway.Filters;
 using WebApiGateway.Middleware;
+using WebApiGateway.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddSerialLogger();
 builder.ConfigureDependencies();
+builder.JwtConfig();
+var jwtConfig = builder.GetSettings<JwtConfig>();
 
 builder.Services.AddControllers(options =>
 {
@@ -19,6 +22,9 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddJwtAuthentication(jwtConfig);
+builder.Services.AddAuthorizationPolicies();
+
 builder.Services.AddAutoMapConfig();
 
 var app = builder.Build();
@@ -28,6 +34,7 @@ app.SwaggerConfig();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();   // добавление middleware аутентификации
 app.UseAuthorization();
 
 app.ConfigureExceptionMiddleware();

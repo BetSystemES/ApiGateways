@@ -1,5 +1,6 @@
 using AutoMapper;
 using Grpc.Net.ClientFactory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
@@ -8,6 +9,7 @@ using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BonusController : ControllerBase
@@ -24,6 +26,7 @@ namespace WebApiGateway.Controllers
         }
 
         // GET api/bonus/"guid"
+      
         [HttpGet("{id}")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] string id)
@@ -47,6 +50,7 @@ namespace WebApiGateway.Controllers
         }
 
         // POST api/bonus
+        [Authorize(Policy = "Admin")]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DiscountModel discountModel)
         {
@@ -66,6 +70,7 @@ namespace WebApiGateway.Controllers
         }
 
         // PUT api/bonus/
+        [Authorize(Policy = "Admin")]
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] DiscountModel discountModel)
         {
