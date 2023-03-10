@@ -13,6 +13,15 @@ namespace WebApiGateway.Mapper.AuthService
         {
             CreateMap<AuthenticateModel, AuthenticateRequest>()
                 .ReverseMap();
+
+            CreateMap<CreateUserModel, CreateUserRequest>()
+                .ReverseMap();
+
+            CreateMap<UserModel, CreateUserResponse>()
+                .ReverseMap();
+
+            CreateMap<UserModel, GetUserResponse>()
+                .ReverseMap();
         }
     }
 }

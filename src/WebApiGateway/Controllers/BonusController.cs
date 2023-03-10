@@ -6,6 +6,7 @@ using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.ProfileService;
+using static WebApiGateway.Models.Constants.PolicyConstants;
 
 namespace WebApiGateway.Controllers
 {
@@ -50,7 +51,7 @@ namespace WebApiGateway.Controllers
         }
 
         // POST api/bonus
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = AdminPolicy)]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DiscountModel discountModel)
         {
@@ -70,7 +71,7 @@ namespace WebApiGateway.Controllers
         }
 
         // PUT api/bonus/
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = AdminPolicy)]
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] DiscountModel discountModel)
         {

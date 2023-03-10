@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddSerialLogger();
 builder.ConfigureDependencies();
 builder.JwtConfig();
-var jwtConfig = builder.GetSettings<JwtConfig>();
+var jwtConfig = builder.GetAppSettings<JwtConfig>();
 
 builder.Services.AddControllers(options =>
 {

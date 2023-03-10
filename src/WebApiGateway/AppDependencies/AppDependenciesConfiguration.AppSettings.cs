@@ -15,7 +15,7 @@ namespace WebApiGateway.AppDependencies
 
             webApplicationBuilder.Services.ApplyClassFromConfig<ServiceEndpointsSettings>(webApplicationBuilder.Configuration);
             
-            return webApplicationBuilder.GetSettings<ServiceEndpointsSettings>();
+            return webApplicationBuilder.GetAppSettings<ServiceEndpointsSettings>();
         }
     }
 }
