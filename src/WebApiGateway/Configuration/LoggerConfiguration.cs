@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace WebApiGateway.Configuration.SeriLog
+namespace WebApiGateway.Configuration
 {
     public static class LoggerConfiguration
     {
@@ -18,7 +18,6 @@ namespace WebApiGateway.Configuration.SeriLog
                     ? config.MinimumLevel.Debug()
                     : config.MinimumLevel.Warning();
             });
-
             return appBuilder;
         }
     }

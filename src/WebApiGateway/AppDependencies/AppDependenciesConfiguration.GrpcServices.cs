@@ -1,6 +1,7 @@
 ﻿using WebApiGateway.Settings;
-using static ProfileService.GRPC.ProfileService;
+using static AuthService.Grpc.AuthService;
 using static CashService.GRPC.CashService;
+using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.AppDependencies
 {
@@ -11,8 +12,8 @@ namespace WebApiGateway.AppDependencies
         {
             services
                 .AddGrpcClient<ProfileServiceClient>(serviceEndpointsSettings)
-                .AddGrpcClient<CashServiceClient>(serviceEndpointsSettings);
-
+                .AddGrpcClient<CashServiceClient>(serviceEndpointsSettings)
+                .AddGrpcClient<AuthServiceClient>(serviceEndpointsSettings);
             return services;
         }
 
@@ -39,6 +40,5 @@ namespace WebApiGateway.AppDependencies
                 })
                 .Services;
         }
-
     }
 }

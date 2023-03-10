@@ -1,0 +1,14 @@
+﻿using System.ComponentModel;
+
+namespace WebApiGateway.Models.AuthService.Extensions
+{
+    public static class EnumHelper
+    {
+        public static string GetDescription<T>(this T enumValue) where T : Enum
+        {
+            var fi = enumValue.GetType().GetField(enumValue.ToString());
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return attributes.Length > 0 && !string.IsNullOrEmpty(attributes[0].Description) ? attributes[0].Description : enumValue.ToString();
+        }
+    }
+}

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Grpc.Net.ClientFactory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using WebApiGateway.Models.ProfileService;
@@ -7,6 +8,7 @@ using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ProfileController : ControllerBase

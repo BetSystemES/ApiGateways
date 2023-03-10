@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using CashService.GRPC;
 using Grpc.Net.ClientFactory;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApiGateway.Models.CashService;
 using static CashService.GRPC.CashService;
 
 namespace WebApiGateway.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CashController : ControllerBase
