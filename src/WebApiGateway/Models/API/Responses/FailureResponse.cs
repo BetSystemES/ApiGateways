@@ -2,13 +2,24 @@
 
 namespace WebApiGateway.Models.API.Responses
 {
-    public class FailureResponse : BasicApiResponse
+    public class FailureResponse<T> : BasicApiResponse<T> where T : class
     {
-        public JsonObject ErrorObject { get; set; }
-
-        public FailureResponse(int statusCode, string? message, JsonObject errorObject) : base(statusCode, false, message)
+        public FailureResponse(string reason, Exception error)
         {
-            ErrorObject = errorObject;
+            Data = null;
+            Status = new Status()
+            {
+                IsSuccessful = false,
+                Reason = reason,
+            };
+            Status.Messages = new List<ErrorMessage>()
+            {
+                new ErrorMessage()
+                {
+                    Field = "",
+                    Message = error.Message,
+                }
+            };
         }
     }
 }

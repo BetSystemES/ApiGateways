@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Grpc.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.SecurityTokenService;
 
@@ -24,7 +25,13 @@ namespace WebApiGateway.Middleware
                                 context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                                 await context.Response.WriteAsJsonAsync(contextFeature.Error.Message);
                                 break;
+
+                            case RpcException _:
+                                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                                await context.Response.WriteAsJsonAsync("GRPC Exception");
+                                break;
                         }
+
                     }
 
                 });

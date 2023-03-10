@@ -13,10 +13,6 @@ namespace WebApiGateway.Configuration.Jwt
         {
             var key = Encoding.ASCII.GetBytes(jwtConfig.Secret);
 
-            AuthRole authRole = AuthRole.Admin;
-            var str = authRole.GetDescription();
-            var str2 = AuthRole.Admin.GetDescription();
-
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
