@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Nodes;
-
-namespace AuthService.Grpc.Interceptors.Helpers
+﻿namespace WebApiGateway.Models.API.Responses
 {
     public class FailureResponse : BasicApiResponse
     {

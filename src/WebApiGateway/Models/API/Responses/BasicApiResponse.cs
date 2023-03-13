@@ -1,4 +1,4 @@
-﻿namespace AuthService.Grpc.Interceptors.Helpers
+﻿namespace WebApiGateway.Models.API.Responses
 {
     public class BasicApiResponse
     {
