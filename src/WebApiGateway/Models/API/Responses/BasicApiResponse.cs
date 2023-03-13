@@ -1,17 +1,25 @@
 ﻿namespace WebApiGateway.Models.API.Responses
 {
-    public class BasicApiResponse<T> where T: class
+    public class BasicApiResponse
     {
-        public T? Data { get; set; }
-        public Status Status { get; set; } = null!;
-    }
+        public StatusMessage StatusMessage { get; set; } = null!;
 
-    public class ApiResponse<T> : BasicApiResponse<T> where T: class 
-    {
-        public ApiResponse(T responceObject)
+        public BasicApiResponse()
         {
-            Data = responceObject;
-            Status = new Status() { IsSuccessful = true };
+            StatusMessage = new StatusMessage()
+            {
+                IsSuccessful = true,
+            };
+        }
+
+        public BasicApiResponse(string reason, List<IBaseExceptionDetails> details)
+        {
+            StatusMessage = new StatusMessage()
+            {
+                IsSuccessful = false,
+                Reason = reason,
+                Details = details
+            };
         }
     }
 }
