@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace WebApiGateway.Models.API.Responses
+namespace AuthService.Grpc.Interceptors.Helpers
 {
     public class FailureResponse : BasicApiResponse
     {
-        public FailureResponse(string reason, List<IBaseExceptionDetails> details) : base(reason, details)
+        public FailureResponse(string reason, IEnumerable<IBaseExceptionDetails> details) : base(reason, details)
         {
-            
+
         }
     }
 }

@@ -4,6 +4,11 @@
     {
         public T? Data { get; set; }
 
+        public ApiResponse()
+        {
+            Data = null;
+        }
+
         public ApiResponse(T responceObject)
         {
             Data = responceObject;

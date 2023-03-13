@@ -1,4 +1,4 @@
-﻿namespace WebApiGateway.Models.API.Responses
+﻿namespace AuthService.Grpc.Interceptors.Helpers
 {
     public class BasicApiResponse
     {
@@ -12,7 +12,7 @@
             };
         }
 
-        public BasicApiResponse(string reason, List<IBaseExceptionDetails> details)
+        public BasicApiResponse(string reason, IEnumerable<IBaseExceptionDetails> details)
         {
             StatusMessage = new StatusMessage()
             {

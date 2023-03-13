@@ -1,4 +1,4 @@
-﻿namespace WebApiGateway.Models.API.Responses
+﻿namespace AuthService.Grpc.Interceptors.Helpers
 {
     public class BaseExceptionDetails : IBaseExceptionDetails
     {
