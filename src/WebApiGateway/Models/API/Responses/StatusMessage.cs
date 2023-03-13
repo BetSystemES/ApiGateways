@@ -1,9 +1,9 @@
-﻿namespace WebApiGateway.Models.API.Responses
+﻿namespace AuthService.Grpc.Interceptors.Helpers
 {
     public class StatusMessage
     {
         public bool IsSuccessful { get; set; }
         public string? Reason { get; set; }
-        public List<IBaseExceptionDetails> Details { get; set; }
+        public IEnumerable<IBaseExceptionDetails> Details { get; set; }
     }
 }
