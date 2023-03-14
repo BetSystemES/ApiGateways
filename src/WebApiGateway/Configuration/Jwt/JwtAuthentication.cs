@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebApiGateway.Models.AuthService.Enums;
-using WebApiGateway.Models.AuthService.Extensions;
 using WebApiGateway.Settings;
 
 namespace WebApiGateway.Configuration.Jwt

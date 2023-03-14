@@ -12,7 +12,7 @@
             };
         }
 
-        public BasicApiResponse(string reason, IEnumerable<IBaseExceptionDetails> details)
+        public BasicApiResponse(string reason, IEnumerable<IBaseExceptionDetail> details)
         {
             StatusMessage = new StatusMessage()
             {

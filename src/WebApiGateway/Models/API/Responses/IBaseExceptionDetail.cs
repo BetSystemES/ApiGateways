@@ -1,8 +1,6 @@
 ﻿namespace WebApiGateway.Models.API.Responses;
 
-public interface IBaseExceptionDetails
+public interface IBaseExceptionDetail
 {
     string Message { get; }
 }
-
-
