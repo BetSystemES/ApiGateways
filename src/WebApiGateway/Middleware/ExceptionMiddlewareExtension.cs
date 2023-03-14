@@ -1,7 +1,11 @@
 ﻿using System.Net;
+using System.Text.Json.Nodes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.SecurityTokenService;
+using Newtonsoft.Json;
+using WebApiGateway.Middleware.Extensisons;
+using WebApiGateway.Models.API.Responses;
 
 namespace WebApiGateway.Middleware
 {
@@ -26,17 +30,27 @@ namespace WebApiGateway.Middleware
                                 await context.Response.WriteAsJsonAsync(contextFeature.Error.Message);
                                 break;
 
-                            case RpcException _:
-                                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                                await context.Response.WriteAsJsonAsync("GRPC Exception");
+                            case RpcException exception:
+                                context.Response.StatusCode = exception.StatusCode.GetHttpCode();
+                                try
+                                {
+                                    string statusDetail = exception.Status.Detail;
+                                    var statusMessage = JsonConvert.DeserializeObject<StatusMessage>(statusDetail);
+
+                                    FailureResponse failureResponse =
+                                        new FailureResponse(statusMessage?.Reason, statusMessage?.Details);
+
+                                    await context.Response.WriteAsJsonAsync(failureResponse);
+                                }
+                                catch
+                                {
+                                    await context.Response.WriteAsJsonAsync("GRPC Exception");
+                                }
                                 break;
                         }
-
                     }
-
                 });
             });
         }
-
     }
 }

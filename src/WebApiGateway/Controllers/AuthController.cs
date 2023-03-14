@@ -51,7 +51,7 @@ namespace WebApiGateway.Controllers
 
             var result = await authClient.AuthenticateAsync(request, cancellationToken: token);
 
-            return Ok(result.Token);
+            return Ok(new ApiResponse<Token>(result.Token));
         }
 
         [HttpPost("refresh-token")]
@@ -67,7 +67,8 @@ namespace WebApiGateway.Controllers
 
             var result = await authClient.RefreshAsync(request, cancellationToken: token);
 
-            return Ok(result.Token);
+            return Ok(new ApiResponse<Token>(result.Token));
+
         }
 
         [HttpPost("create-user")]
@@ -90,7 +91,6 @@ namespace WebApiGateway.Controllers
 
             var responce = _mapper.Map<User, UserModel>(result.User);
 
-            //return Ok(responce);
             return Ok(new ApiResponse<UserModel>(responce));
         }
 
@@ -110,7 +110,8 @@ namespace WebApiGateway.Controllers
 
             var responce = _mapper.Map<User, UserModel>(result.User);
 
-            return Ok(result);
+            return Ok(new ApiResponse<UserModel>(responce));
+
         }
     }
 }

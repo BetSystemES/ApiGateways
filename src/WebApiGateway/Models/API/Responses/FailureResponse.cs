@@ -2,7 +2,7 @@
 {
     public class FailureResponse : BasicApiResponse
     {
-        public FailureResponse(string reason, IEnumerable<IBaseExceptionDetails> details) : base(reason, details)
+        public FailureResponse(string reason, IEnumerable<IBaseExceptionDetail> details) : base(reason, details)
         {
 
         }
