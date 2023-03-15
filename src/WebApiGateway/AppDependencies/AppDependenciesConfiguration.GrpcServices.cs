@@ -1,7 +1,9 @@
-﻿using WebApiGateway.Settings;
+﻿using Grpc.Net.Client.Configuration;
+using WebApiGateway.Settings;
 using static AuthService.Grpc.AuthService;
 using static CashService.GRPC.CashService;
 using static ProfileService.GRPC.ProfileService;
+using static WebApiGateway.Configuration.GrpcRetryPolicyConfiguration;
 
 namespace WebApiGateway.AppDependencies
 {
@@ -37,6 +39,10 @@ namespace WebApiGateway.AppDependencies
                 .AddGrpcClient<TClient>(clientName, options =>
                 {
                     options.Address = new Uri(endpoint);
+                    options.ChannelOptionsActions.Add(options =>
+                    {
+                        options.ServiceConfig = new ServiceConfig { MethodConfigs = { DefaultMethodConfig } };
+                    });
                 })
                 .Services;
         }
