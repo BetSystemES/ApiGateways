@@ -5,15 +5,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
+using WebApiGateway.Models.AuthService.Enums;
+using WebApiGateway.Models.AuthService.Extensions;
+using WebApiGateway.Models.BaseModels;
 using static AuthService.Grpc.AuthService;
 using static WebApiGateway.Models.Constants.PolicyConstants;
-
 
 namespace WebApiGateway.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : BaseAuthController
     {
         private readonly ILogger<AuthController> _logger;
         private readonly GrpcClientFactory _grpcClientFactory;
@@ -26,22 +28,8 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("test1")]
-        [Authorize(Policy = AdminPolicy)]
-        public ActionResult<string> Test1()
-        {
-            return Ok("test1");
-        }
-
-        [HttpGet("test2")]
-        [Authorize]
-        public ActionResult<string> Test2()
-        {
-            return Ok("test2");
-        }
-
-
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> Login([FromBody] BasicUserModel basicUserModel)
         {
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
@@ -72,6 +60,7 @@ namespace WebApiGateway.Controllers
         }
 
         [HttpPost("create-user")]
+        [AllowAnonymous]
         public async Task<ActionResult<string>> CreateUser([FromBody] BasicUserModel basicUserModel)
         {
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
@@ -80,10 +69,10 @@ namespace WebApiGateway.Controllers
             var getAllRolesRequest = new GetAllRolesRequest();
             var getAllRolesResponce = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
 
-            var roleId = getAllRolesResponce?.Roles?.FirstOrDefault(x => x.Name.ToLower() == "user")?.Id;
+            var roleId = getAllRolesResponce?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
 
             CreateUserModel createUserModel = new CreateUserModel(basicUserModel);
-            createUserModel.Roles.Add(roleId);
+            createUserModel.RoleIds.Add(roleId);
 
             var request = _mapper.Map<CreateUserModel, CreateUserRequest>(createUserModel);
 
@@ -94,16 +83,15 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<UserModel>(responce));
         }
 
-
         [HttpPost("get-user")]
-        public async Task<ActionResult<string>> GetUser([FromBody] string userId)
+        public async Task<ActionResult<string>> GetUser([FromBody] BaseUserRequestModel requestModel)
         {
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetUserRequest()
             {
-                UserId = userId,
+                UserId = requestModel.UserId.ToString(),
             };
 
             var result = await authClient.GetUserAsync(request, cancellationToken: token);
@@ -111,7 +99,6 @@ namespace WebApiGateway.Controllers
             var responce = _mapper.Map<User, UserModel>(result.User);
 
             return Ok(new ApiResponse<UserModel>(responce));
-
         }
     }
 }

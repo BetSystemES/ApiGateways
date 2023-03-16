@@ -1,17 +1,16 @@
 using AutoMapper;
 using Grpc.Net.ClientFactory;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
+using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.ProfileService;
 
 namespace WebApiGateway.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class ProfileController : ControllerBase
+    public class ProfileController : BaseAuthController
     {
         private readonly GrpcClientFactory _grpcClientFactory;
         private readonly IMapper _mapper;
@@ -32,19 +31,19 @@ namespace WebApiGateway.Controllers
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
-            var request = new GetPersonalDataByIdRequest()
+            var request = new GetProfileDataByIdRequest()
             {
-                Profilebyidrequest = new ProfileByIdRequest()
+                ProfileByIdRequest = new ProfileByIdRequest()
                 {
                     Id = id
                 },
             };
 
-            var result = await profileClient.GetPersonalDataByIdAsync(request, cancellationToken: token);
+            var result = await profileClient.GetProfileDataByIdAsync(request, cancellationToken: token);
 
-            var response = _mapper.Map<PersonalProfile, ProfileModel>(result.Personalprofile);
+            var response = _mapper.Map<UserProfile, ProfileModel>(result.UserProfile);
 
-            return Ok(response);
+            return Ok(new ApiResponse<ProfileModel>(response));
         }
 
 
@@ -55,16 +54,16 @@ namespace WebApiGateway.Controllers
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
-            var requestModel = _mapper.Map<ProfileModel, PersonalProfile>(profileModel);
+            var requestModel = _mapper.Map<ProfileModel, UserProfile>(profileModel);
 
-            var request = new AddPersonalDataRequest()
+            var request = new AddProfileDataRequest()
             {
-                Personalprofile = requestModel
+                UserProfile = requestModel
             };
 
-            var result = await profileClient.AddPersonalDataAsync(request, cancellationToken: token);
+            var result = await profileClient.AddProfileDataAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
 
         // PUT api/profile/
@@ -74,16 +73,16 @@ namespace WebApiGateway.Controllers
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
-            var requestModel = _mapper.Map<ProfileModel, PersonalProfile>(profileModel);
+            var requestModel = _mapper.Map<ProfileModel, UserProfile>(profileModel);
 
-            var request = new UpdatePersonalDataRequest()
+            var request = new UpdateProfileDataRequest()
             {
-                Personalprofile = requestModel
+                UserProfile = requestModel
             };
 
-            var result = await profileClient.UpdatePersonalDataAsync(request, cancellationToken: token);
+            var result = await profileClient.UpdateProfileDataAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
     }
 }

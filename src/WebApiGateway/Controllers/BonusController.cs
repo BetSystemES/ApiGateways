@@ -4,16 +4,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
+using WebApiGateway.Models.API.Responses;
+using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.ProfileService;
 using static WebApiGateway.Models.Constants.PolicyConstants;
 
 namespace WebApiGateway.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class BonusController : ControllerBase
+    public class BonusController : BaseAuthController
     {
         private readonly GrpcClientFactory _grpcClientFactory;
         private readonly IMapper _mapper;
@@ -30,16 +31,16 @@ namespace WebApiGateway.Controllers
       
         [HttpGet("{id}")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
-        public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] string id)
+        public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] BaseProfileRequstModel requstModel)
         {
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetDiscountsRequest()
             {
-                Profilebyidrequest = new ProfileByIdRequest()
+                ProfileByIdRequest = new ProfileByIdRequest()
                 {
-                    Id = id
+                    Id = requstModel.ProfileId
                 },
             };
 
@@ -47,7 +48,7 @@ namespace WebApiGateway.Controllers
 
             List<DiscountModel> response = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
 
-            return Ok(response);
+            return Ok(new ApiResponse<List<DiscountModel>>(response));
         }
 
         // POST api/bonus
@@ -67,7 +68,7 @@ namespace WebApiGateway.Controllers
 
             var result = await profileClient.AddDiscountAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
 
         // PUT api/bonus/
@@ -87,7 +88,7 @@ namespace WebApiGateway.Controllers
 
             var result = await profileClient.UpdateDiscountAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
     }
 }

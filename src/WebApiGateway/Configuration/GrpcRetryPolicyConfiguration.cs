@@ -16,12 +16,9 @@ namespace WebApiGateway.Configuration
                 BackoffMultiplier = 1,
                 RetryableStatusCodes =
                 {
-                    StatusCode.DeadlineExceeded,
-                    StatusCode.Internal,
-                    StatusCode.NotFound,
-                    StatusCode.ResourceExhausted,
+                    StatusCode.Unauthenticated, 
+                    StatusCode.NotFound, 
                     StatusCode.Unavailable,
-                    StatusCode.Unknown
                 }
             }
         };

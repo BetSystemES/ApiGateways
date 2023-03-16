@@ -31,19 +31,21 @@ namespace WebApiGateway.Middleware
 
                             case RpcException exception:
                                 context.Response.StatusCode = exception.StatusCode.GetHttpCode();
+                                string? statusDetail = null;
                                 try
                                 {
-                                    string statusDetail = exception.Status.Detail;
+                                    statusDetail = exception.Status.Detail;
                                     var statusMessage = JsonConvert.DeserializeObject<StatusMessage>(statusDetail);
 
                                     FailureResponse failureResponse =
-                                        new FailureResponse(statusMessage?.Reason, statusMessage?.Details);
+                                        new FailureResponse(statusMessage?.Reason, (IEnumerable<GrpcExceptionDetail>)statusMessage?.Details);
 
                                     await context.Response.WriteAsJsonAsync(failureResponse);
                                 }
                                 catch
                                 {
-                                    await context.Response.WriteAsJsonAsync("GRPC Exception");
+                                    string output = string.Format("GRPC Exception: {0}", statusDetail);
+                                    await context.Response.WriteAsJsonAsync(output);
                                 }
                                 break;
                         }

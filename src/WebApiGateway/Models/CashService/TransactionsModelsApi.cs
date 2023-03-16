@@ -1,8 +1,9 @@
-﻿namespace WebApiGateway.Models.CashService
+﻿using WebApiGateway.Models.BaseModels;
+
+namespace WebApiGateway.Models.CashService
 {
-    public class TransactionModelApi
+    public class TransactionModelApi : BaseProfileRequstModel
     {
-        public string? ProfileId { get; set; }
         public List<TransactionApi>? TransactionApis { get; set; }
     }
 }

@@ -10,5 +10,12 @@ namespace WebApiGateway.Models.AuthService.Extensions
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
             return attributes.Length > 0 && !string.IsNullOrEmpty(attributes[0].Description) ? attributes[0].Description : enumValue.ToString();
         }
+
+        public static T GetEnumItem<T>(this string descriptionToMatch) where T : Enum
+        {
+            return Enum.GetValues(typeof(T))
+                .Cast<T>()
+                .FirstOrDefault(v => string.Equals(v.GetDescription(), descriptionToMatch));
+        }
     }
 }
