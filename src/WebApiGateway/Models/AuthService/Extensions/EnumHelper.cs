@@ -15,7 +15,7 @@ namespace WebApiGateway.Models.AuthService.Extensions
         {
             return Enum.GetValues(typeof(T))
                 .Cast<T>()
-                .FirstOrDefault(v => v.GetDescription() == descriptionToMatch);
+                .FirstOrDefault(v => string.Equals(v.GetDescription(), descriptionToMatch));
         }
     }
 }

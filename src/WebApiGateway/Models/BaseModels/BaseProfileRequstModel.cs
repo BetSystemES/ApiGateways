@@ -1,7 +1,9 @@
-﻿namespace WebApiGateway.Models.BaseModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApiGateway.Models.BaseModels
 {
     public class BaseProfileRequstModel
     {
-        public string? ProfileId { get; set; }
+        [Required] public string ProfileId { get; set; }
     }
 }

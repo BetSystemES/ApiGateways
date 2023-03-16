@@ -1,8 +1,6 @@
 ﻿using System.Net;
-using System.Xml.Linq;
 using Grpc.Core;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.IdentityModel.SecurityTokenService;
 using Newtonsoft.Json;
 using WebApiGateway.Middleware.Extensisons;

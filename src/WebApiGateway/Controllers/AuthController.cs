@@ -28,26 +28,6 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("test1")]
-        [Authorize(Policy = AdminPolicy)]
-        public ActionResult<string> Test1()
-        {
-            return Ok("test1");
-        }
-
-        [HttpGet("test2/{UserId:guid}")]
-        public ActionResult<string> Test2([FromRoute] BaseUserRequestModel requestModel)
-        {
-            return Ok("test2");
-        }
-
-        [HttpGet("test3/{UserId:guid}")]
-        [AllowAnonymous]
-        public ActionResult<string> Test3([FromRoute] BaseUserRequestModel requestModel)
-        {
-            return Ok("test3");
-        }
-
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<string>> Login([FromBody] BasicUserModel basicUserModel)
@@ -89,7 +69,7 @@ namespace WebApiGateway.Controllers
             var getAllRolesRequest = new GetAllRolesRequest();
             var getAllRolesResponce = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
 
-            var roleId = getAllRolesResponce?.Roles?.FirstOrDefault(x => x.Name.ToLower() == AuthRole.User.GetDescription())?.Id;
+            var roleId = getAllRolesResponce?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
 
             CreateUserModel createUserModel = new CreateUserModel(basicUserModel);
             createUserModel.RoleIds.Add(roleId);
