@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiGateway", "src\WebApiGateway\WebApiGateway.csproj", "{5B057F59-F545-4D46-B170-44F86C08B8D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiGateway", "src\WebApiGateway\WebApiGateway.csproj", "{5B057F59-F545-4D46-B170-44F86C08B8D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{663E645F-F842-4317-A547-1D89BCE95F34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiGateway.IntegrationTests", "tests\WebApiGateway.IntegrationTests\WebApiGateway.IntegrationTests.csproj", "{C5F7C477-C853-4043-A35B-DF5978058C82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiGateway.IntegrationTests", "tests\WebApiGateway.IntegrationTests\WebApiGateway.IntegrationTests.csproj", "{C5F7C477-C853-4043-A35B-DF5978058C82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiGateway.UnitTests", "tests\WebApiGateway.UnitTests\WebApiGateway.UnitTests.csproj", "{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +25,17 @@ Global
 		{C5F7C477-C853-4043-A35B-DF5978058C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5F7C477-C853-4043-A35B-DF5978058C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5F7C477-C853-4043-A35B-DF5978058C82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C5F7C477-C853-4043-A35B-DF5978058C82} = {663E645F-F842-4317-A547-1D89BCE95F34}
+		{A243B5C5-F0C2-45C1-B1CA-8E9EA826B60D} = {663E645F-F842-4317-A547-1D89BCE95F34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FA0ED0A4-814B-44ED-B95E-03854DC7DF9D}

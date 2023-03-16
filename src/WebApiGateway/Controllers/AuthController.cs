@@ -9,7 +9,6 @@ using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.Models.AuthService.Extensions;
 using WebApiGateway.Models.BaseModels;
 using static AuthService.Grpc.AuthService;
-using static WebApiGateway.Models.Constants.PolicyConstants;
 
 namespace WebApiGateway.Controllers
 {
