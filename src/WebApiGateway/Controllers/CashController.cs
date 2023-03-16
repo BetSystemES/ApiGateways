@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using CashService.GRPC;
 using Grpc.Net.ClientFactory;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApiGateway.Models.API.Responses;
+using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Models.CashService;
 using static CashService.GRPC.CashService;
 
 namespace WebApiGateway.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CashController : ControllerBase
+    public class CashController : BaseAuthController
     {
         private readonly GrpcClientFactory _grpcClientFactory;
         private readonly IMapper _mapper;
@@ -25,41 +25,41 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
+
         [HttpGet("{id}/transactions", Name = nameof(GetTransactionsHistory))]
-        public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] string id)
+        public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] BaseProfileRequstModel requstModel)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetTransactionsHistoryRequest()
             {
-               ProfileId = id
+               ProfileId = requstModel.ProfileId
             };
 
             var result = await cashClient.GetTransactionsHistoryAsync(request, cancellationToken: token);
 
             var response = _mapper.Map<TransactionModel, TransactionModelApi>(result.Balance);
 
-            return Ok(response);
+            return Ok(new ApiResponse<TransactionModelApi>(response));
         }
 
-        
         [HttpGet("{id}", Name = nameof(GetBalance)) ]
-        public async Task<ActionResult<TransactionModelApi>> GetBalance([FromRoute] string id)
+        public async Task<ActionResult<TransactionModelApi>> GetBalance([FromRoute] BaseProfileRequstModel requstModel)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new GetBalanceRequest()
             {
-                ProfileId = id
+                ProfileId = requstModel.ProfileId
             };
 
             var result = await cashClient.GetBalanceAsync(request, cancellationToken: token);
 
             var response = _mapper.Map<TransactionModel, TransactionModelApi>(result.Balance);
 
-            return Ok(response);
+            return Ok(new ApiResponse<TransactionModelApi>(response));
         }
 
 
@@ -78,7 +78,7 @@ namespace WebApiGateway.Controllers
 
             var result = await cashClient.DepositAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
 
         [HttpPost("withdraw", Name = nameof(Withdraw))]
@@ -98,7 +98,7 @@ namespace WebApiGateway.Controllers
 
             var resultModel = _mapper.Map<TransactionModel, TransactionModelApi>(result.Withdrawresponse);
 
-            return Ok(resultModel);
+            return Ok(new ApiResponse<TransactionModelApi>(resultModel));
         }
 
 
@@ -115,7 +115,7 @@ namespace WebApiGateway.Controllers
 
             var result = await cashClient.DepositRangeAsync(request, cancellationToken: token);
 
-            return Ok(result);
+            return Ok(new ApiResponse<string>());
         }
 
         [HttpPost("withdrawrange", Name = nameof(WithdrawRange))]
@@ -133,7 +133,7 @@ namespace WebApiGateway.Controllers
 
             var resultModel = _mapper.Map<IEnumerable<TransactionModel>, List<TransactionModelApi>>(result.WithdrawRangeResponses);
 
-            return Ok(resultModel);
+            return Ok(new ApiResponse<IEnumerable<TransactionModelApi>>(resultModel));
         }
     }
 }

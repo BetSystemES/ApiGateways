@@ -7,7 +7,7 @@ namespace WebApiGateway.Configuration.Jwt
     {
         public static WebApplicationBuilder JwtConfig(this WebApplicationBuilder builder)
         {
-            builder.Services.ApplyClassFromConfig<JwtConfig>(builder.Configuration);
+            builder.Services.ConfigureAppSettings<JwtConfig>(builder.Configuration);
             return builder;
         }
     }

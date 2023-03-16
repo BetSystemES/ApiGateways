@@ -2,10 +2,11 @@
 {
     public static partial class AppDependenciesConfiguration
     {
-        public static void ApplyClassFromConfig<T>(this IServiceCollection services,
-            IConfiguration configuration) where T : class
+        public static void ConfigureAppSettings<T>(this IServiceCollection services,
+            IConfiguration configuration, string? sectionName = null) where T : class
         {
-            services.Configure<T>(configuration.GetSection(typeof(T).Name));
+            services.Configure<T>(
+                configuration.GetSection(string.IsNullOrEmpty(sectionName) ? typeof(T).Name : sectionName));
         }
 
         public static T GetAppSettings<T>(this WebApplicationBuilder webApplicationBuilder) where T : class

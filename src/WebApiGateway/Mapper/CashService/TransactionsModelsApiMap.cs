@@ -25,6 +25,5 @@ namespace WebApiGateway.Mapper.CashService
 
             CreateMap<CashType, CashTypeApi>().ReverseMap();
         }
-
     }
 }

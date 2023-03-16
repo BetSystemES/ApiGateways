@@ -6,5 +6,10 @@
         {
 
         }
+
+        public FailureResponse(string reason, IEnumerable<GrpcExceptionDetail> details) : base(reason, details)
+        {
+
+        }
     }
 }
