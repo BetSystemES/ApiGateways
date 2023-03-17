@@ -35,7 +35,9 @@ namespace WebApiGateway.Services.Implementations
         }
 
         public IEnumerable<AuthRole> GetRoles() => _roles;
+
         public string GetToken() => _token;
+
         public Guid AuthenticatedUserId() => _userId;
     }
 }

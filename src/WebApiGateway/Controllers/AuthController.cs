@@ -55,7 +55,6 @@ namespace WebApiGateway.Controllers
             var result = await authClient.RefreshAsync(request, cancellationToken: token);
 
             return Ok(new ApiResponse<Token>(result.Token));
-
         }
 
         // TODO:  Why role ids not in body?

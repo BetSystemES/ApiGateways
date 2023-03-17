@@ -14,7 +14,7 @@ namespace WebApiGateway.AppDependencies
             });
 
             webApplicationBuilder.Services.ConfigureAppSettings<ServiceEndpointsSettings>(webApplicationBuilder.Configuration);
-            
+
             return webApplicationBuilder.GetAppSettings<ServiceEndpointsSettings>();
         }
     }

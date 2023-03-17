@@ -6,6 +6,7 @@ namespace WebApiGateway.Models.AuthService.Enums
     {
         [Description("admin")]
         Admin,
+
         [Description("user")]
         User,
     }

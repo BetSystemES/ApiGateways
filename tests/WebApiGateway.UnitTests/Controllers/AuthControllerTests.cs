@@ -43,12 +43,12 @@ public class AuthControllerTests : BaseTest
 
         Logger.LogInformation($"AuthController.CreateUser result: {Serialize(result)}");
 
-        var actionResult = (OkObjectResult) result.Result!;
+        var actionResult = (OkObjectResult)result.Result!;
         actionResult.Value.Should().NotBeNull();
 
         Logger.LogInformation($"actionResult result: {Serialize(actionResult)}");
 
-        var apiResponse = (ApiResponse<UserModel>) actionResult.Value!;
+        var apiResponse = (ApiResponse<UserModel>)actionResult.Value!;
         apiResponse.Should().NotBeNull();
 
         Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");

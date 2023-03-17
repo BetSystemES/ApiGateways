@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Services.Contracts;
@@ -9,6 +9,7 @@ namespace WebApiGateway.Filters
     public class AuthFilter : ActionFilterAttribute
     {
         private readonly IAuthClaimService _authClaimService;
+
         public AuthFilter(IAuthClaimService authClaimService)
         {
             _authClaimService = authClaimService;
@@ -25,9 +26,11 @@ namespace WebApiGateway.Filters
                     case BaseUserRequestModel request:
                         requestId = request.UserId.ToString();
                         break;
+
                     case BaseProfileRequstModel request:
                         requestId = request.ProfileId;
                         break;
+
                     default: return;
                 }
             }

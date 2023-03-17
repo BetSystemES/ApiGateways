@@ -16,8 +16,8 @@ namespace WebApiGateway.Configuration
                 BackoffMultiplier = 1,
                 RetryableStatusCodes =
                 {
-                    StatusCode.Unauthenticated, 
-                    StatusCode.NotFound, 
+                    StatusCode.Unauthenticated,
+                    StatusCode.NotFound,
                     StatusCode.Unavailable,
                 }
             }

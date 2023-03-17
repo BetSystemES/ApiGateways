@@ -3,6 +3,7 @@ using AutoMapper;
 using FizzWare.NBuilder;
 using Google.Protobuf.Collections;
 using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -12,9 +13,8 @@ using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
 using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.Models.AuthService.Extensions;
-using static AuthService.Grpc.AuthService;
-using Grpc.Net.ClientFactory;
 using WebApiGateway.UnitTests.Infrastructure.Verifiers;
+using static AuthService.Grpc.AuthService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
