@@ -11,23 +11,23 @@ namespace WebApiGateway.UnitTests.Infrastructure.Verifiers;
 public class AuthControllerTestVerifier
 {
     public AuthController AuthController { get; }
-    public BasicUserModel BasicUserModel { get; }
+    public BasicUserModel CreateUserRequestModel { get; }
     public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
     public Mock<AuthServiceClient> AuthServiceClient { get; }
-    public ApiResponse<UserModel> CreateUserExpectedResult { get; }
+    public ApiResponse<UserModel> CreateUserExpectedResultModel { get; }
 
     public AuthControllerTestVerifier(
         AuthController authController,
-        BasicUserModel basicUserModel,
+        BasicUserModel createUserRequestModel,
         Mock<GrpcClientFactory> mockGrpcClientFactory,
         Mock<AuthServiceClient> authServiceClient,
-        ApiResponse<UserModel> createUserExpectedResult)
+        ApiResponse<UserModel> createUserExpectedResultModel)
     {
         AuthController = authController;
-        BasicUserModel = basicUserModel;
+        CreateUserRequestModel = createUserRequestModel;
         MockGrpcClientFactory = mockGrpcClientFactory;
         AuthServiceClient = authServiceClient;
-        CreateUserExpectedResult = createUserExpectedResult;
+        CreateUserExpectedResultModel = createUserExpectedResultModel;
     }
 
     public AuthControllerTestVerifier VerifyGrpcClientFactoryCreateClient()

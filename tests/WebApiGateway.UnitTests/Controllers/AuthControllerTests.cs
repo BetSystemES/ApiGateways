@@ -24,19 +24,19 @@ public class AuthControllerTests : BaseTest
         var userId = Guid.NewGuid();
 
         // TODO: refactor unit test because CreateUser will not invoke GetAllRoles method.
-        var verifier = new AuthControllerTestBuilder()
+        var verifier = new AuthControllerTestVerifierBuilder()
             .Prepare()
             .AddRoles(AuthRole.User, 1)
-            .SetGetAllRolesResponse()
-            .SetupGetAllRolesResponse()
-            .SetCreateUserResponse(userId)
-            .SetupCreateUserResponse()
+            .SetGrpcGetAllRolesResponse()
+            .SetupGrpcGetAllRolesResponse()
+            .SetGrpcCreateUserResponse(userId)
+            .SetupGrpcCreateUserResponse()
             .SetupGrpcClientFactory()
-            .SetBasicUserModel()
-            .SetCreateUserExpectedResult(userId)
+            .SetCreateUserRequestModel()
+            .SetCreateUserExpectedResultModel(userId)
             .Build();
 
-        var result = await verifier.AuthController.CreateUser(verifier.BasicUserModel);
+        var result = await verifier.AuthController.CreateUser(verifier.CreateUserRequestModel);
         result.Result.Should().NotBeNull();
 
         Logger.LogInformation($"AuthController.CreateUser result: {Serialize(result)}");
@@ -51,18 +51,18 @@ public class AuthControllerTests : BaseTest
 
         Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");
         Logger.LogInformation(
-            $"verifier.CreateUserExpectedResult result: {Serialize(verifier.CreateUserExpectedResult)}");
+            $"verifier.CreateUserExpectedResultModel result: {Serialize(verifier.CreateUserExpectedResultModel)}");
 
         verifier
             .VerifyGrpcClientFactoryCreateClient()
             .VerifyAuthServiceClientGetAllRolesAsync()
             .VerifyAuthServiceClientCreateUserAsync();
 
-        verifier.CreateUserExpectedResult.Data.Should().NotBeNull();
+        verifier.CreateUserExpectedResultModel.Data.Should().NotBeNull();
         apiResponse.Data.Should().NotBeNull();
 
-        verifier.CreateUserExpectedResult.Data!.Id.Should().Be(apiResponse.Data!.Id);
-        verifier.CreateUserExpectedResult.Data.Email.Should().Be(apiResponse.Data.Email);
-        verifier.CreateUserExpectedResult.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
+        verifier.CreateUserExpectedResultModel.Data!.Id.Should().Be(apiResponse.Data!.Id);
+        verifier.CreateUserExpectedResultModel.Data.Email.Should().Be(apiResponse.Data.Email);
+        verifier.CreateUserExpectedResultModel.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
     }
 }

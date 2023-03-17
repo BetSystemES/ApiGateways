@@ -18,20 +18,20 @@ using WebApiGateway.UnitTests.Infrastructure.Verifiers;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
-public class AuthControllerTestBuilder
+public class AuthControllerTestVerifierBuilder
 {
     private AuthController? _authController;
 
     private Mock<GrpcClientFactory> _mockGrpcClientFactory = new();
     private Mock<AuthServiceClient> _mockAuthServiceClient = new();
 
-    private BasicUserModel _basicUserModel = new();
-    private CreateUserResponse _createUserResponse = new();
-    private ApiResponse<UserModel> _createUserExpectedResult = new();
-    private GetAllRolesResponse _getAllRolesResponse = new();
-    private RepeatedField<Role> _roles = new();
+    private BasicUserModel _createUserRequestModel = new();
+    private CreateUserResponse _createGrpcUserResponse = new();
+    private ApiResponse<UserModel> _createUserExpectedResultModel = new();
+    private GetAllRolesResponse _grpcGetAllRolesResponse = new();
+    private RepeatedField<Role> _grpcRoles = new();
 
-    public AuthControllerTestBuilder Prepare()
+    public AuthControllerTestVerifierBuilder Prepare()
     {
         var mockLogger = new Mock<ILogger<AuthController>>();
         _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
@@ -51,36 +51,36 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder AddRoles(AuthRole authRole, int size = 5)
+    public AuthControllerTestVerifierBuilder AddRoles(AuthRole authRole, int size = 5)
     {
-        var roles = Builder<Role>
+        var grpcRoles = Builder<Role>
             .CreateListOfSize(size)
             .All()
             .With(x => x.Id = Guid.NewGuid().ToString())
             .With(x => x.Name = authRole.GetDescription())
             .Build();
 
-        _roles.Add(roles);
+        _grpcRoles.Add(grpcRoles);
 
         return this;
     }
 
-    public AuthControllerTestBuilder SetGetAllRolesResponse()
+    public AuthControllerTestVerifierBuilder SetGrpcGetAllRolesResponse()
     {
-        _getAllRolesResponse = new GetAllRolesResponse
+        _grpcGetAllRolesResponse = new GetAllRolesResponse
         {
             Roles =
             {
-                _roles
+                _grpcRoles
             }
         };
 
         return this;
     }
 
-    public AuthControllerTestBuilder SetupGetAllRolesResponse()
+    public AuthControllerTestVerifierBuilder SetupGrpcGetAllRolesResponse()
     {
-        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_getAllRolesResponse);
+        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_grpcGetAllRolesResponse);
 
         _mockAuthServiceClient
             .Setup(f => f.GetAllRolesAsync(
@@ -92,9 +92,9 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder SetCreateUserResponse(Guid id, string? email = null, bool? isLocked = null)
+    public AuthControllerTestVerifierBuilder SetGrpcCreateUserResponse(Guid id, string? email = null, bool? isLocked = null)
     {
-        _createUserResponse = Builder<CreateUserResponse>
+        _createGrpcUserResponse = Builder<CreateUserResponse>
             .CreateNew()
             .With(x => x.User = Builder<User>
                 .CreateNew()
@@ -107,9 +107,9 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder SetupCreateUserResponse()
+    public AuthControllerTestVerifierBuilder SetupGrpcCreateUserResponse()
     {
-        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_createUserResponse);
+        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_createGrpcUserResponse);
 
         _mockAuthServiceClient
             .Setup(f => f.CreateUserAsync(
@@ -122,7 +122,7 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder SetupGrpcClientFactory()
+    public AuthControllerTestVerifierBuilder SetupGrpcClientFactory()
     {
         _mockGrpcClientFactory
             .Setup(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()))
@@ -131,9 +131,9 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder SetBasicUserModel(string? email = null, string? password = null)
+    public AuthControllerTestVerifierBuilder SetCreateUserRequestModel(string? email = null, string? password = null)
     {
-        _basicUserModel = Builder<BasicUserModel>
+        _createUserRequestModel = Builder<BasicUserModel>
             .CreateNew()
             .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
             .With(x => x.Password = string.IsNullOrEmpty(password) ? "!Qwerty999^" : password)
@@ -142,9 +142,9 @@ public class AuthControllerTestBuilder
         return this;
     }
 
-    public AuthControllerTestBuilder SetCreateUserExpectedResult(Guid id, string? email = null, bool? isLocked = null)
+    public AuthControllerTestVerifierBuilder SetCreateUserExpectedResultModel(Guid id, string? email = null, bool? isLocked = null)
     {
-        _createUserExpectedResult = Builder<ApiResponse<UserModel>>
+        _createUserExpectedResultModel = Builder<ApiResponse<UserModel>>
             .CreateNew()
             .With(x => x.Data = Builder<UserModel>
                 .CreateNew()
@@ -161,10 +161,10 @@ public class AuthControllerTestBuilder
     {
         if (_authController is null)
             throw new InvalidOperationException(
-                $"{nameof(AuthControllerTestBuilder)} setup is wrong. Use Prepare method before build");
+                $"{nameof(AuthControllerTestVerifierBuilder)} setup is wrong. Use Prepare method before build");
 
-        return new AuthControllerTestVerifier(_authController, _basicUserModel, _mockGrpcClientFactory,
-            _mockAuthServiceClient, _createUserExpectedResult);
+        return new AuthControllerTestVerifier(_authController, _createUserRequestModel, _mockGrpcClientFactory,
+            _mockAuthServiceClient, _createUserExpectedResultModel);
     }
 
     private AsyncUnaryCall<T> GrpcAsyncUnaryCallBuilder<T>(T result) where T : class
