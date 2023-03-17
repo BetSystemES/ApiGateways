@@ -51,7 +51,7 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder AddRoles(AuthRole authRole, int size = 5)
+    public AuthControllerTestVerifierBuilder AddGrpcRoles(AuthRole authRole, int size = 5)
     {
         var grpcRoles = Builder<Role>
             .CreateListOfSize(size)
