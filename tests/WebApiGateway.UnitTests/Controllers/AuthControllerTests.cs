@@ -32,7 +32,7 @@ public class AuthControllerTests : BaseTest
             .SetupCreateUserResponse()
             .SetupGrpcClientFactory()
             .SetBasicUserModel()
-            .SetExpectedResultUserModel(userId)
+            .SetCreateUserExpectedResult(userId)
             .Build();
 
         var result = await verifier.AuthController.CreateUser(verifier.BasicUserModel);
@@ -50,18 +50,18 @@ public class AuthControllerTests : BaseTest
 
         Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");
         Logger.LogInformation(
-            $"verifier.ExpectedResultUserModel result: {Serialize(verifier.ExpectedResultUserModel)}");
+            $"verifier.CreateUserExpectedResult result: {Serialize(verifier.CreateUserExpectedResult)}");
 
         verifier
             .VerifyGrpcClientFactoryCreateClient()
             .VerifyAuthServiceClientGetAllRolesAsync()
             .VerifyAuthServiceClientCreateUserAsync();
 
-        verifier.ExpectedResultUserModel.Data.Should().NotBeNull();
+        verifier.CreateUserExpectedResult.Data.Should().NotBeNull();
         apiResponse.Data.Should().NotBeNull();
 
-        verifier.ExpectedResultUserModel.Data!.Id.Should().Be(apiResponse.Data!.Id);
-        verifier.ExpectedResultUserModel.Data.Email.Should().Be(apiResponse.Data.Email);
-        verifier.ExpectedResultUserModel.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
+        verifier.CreateUserExpectedResult.Data!.Id.Should().Be(apiResponse.Data!.Id);
+        verifier.CreateUserExpectedResult.Data.Email.Should().Be(apiResponse.Data.Email);
+        verifier.CreateUserExpectedResult.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
     }
 }

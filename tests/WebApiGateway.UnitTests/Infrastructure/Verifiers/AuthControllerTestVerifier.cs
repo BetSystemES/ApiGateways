@@ -14,20 +14,20 @@ public class AuthControllerTestVerifier
     public BasicUserModel BasicUserModel { get; }
     public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
     public Mock<AuthServiceClient> AuthServiceClient { get; }
-    public ApiResponse<UserModel> ExpectedResultUserModel { get; }
+    public ApiResponse<UserModel> CreateUserExpectedResult { get; }
 
     public AuthControllerTestVerifier(
         AuthController authController,
         BasicUserModel basicUserModel,
         Mock<GrpcClientFactory> mockGrpcClientFactory,
         Mock<AuthServiceClient> authServiceClient,
-        ApiResponse<UserModel> expectedResultUserModel)
+        ApiResponse<UserModel> createUserExpectedResult)
     {
         AuthController = authController;
         BasicUserModel = basicUserModel;
         MockGrpcClientFactory = mockGrpcClientFactory;
         AuthServiceClient = authServiceClient;
-        ExpectedResultUserModel = expectedResultUserModel;
+        CreateUserExpectedResult = createUserExpectedResult;
     }
 
     public AuthControllerTestVerifier VerifyGrpcClientFactoryCreateClient()
