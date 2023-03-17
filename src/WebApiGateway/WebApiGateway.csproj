@@ -9,13 +9,6 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Models\AppSettings\**" />
-    <Content Remove="Models\AppSettings\**" />
-    <EmbeddedResource Remove="Models\AppSettings\**" />
-    <None Remove="Models\AppSettings\**" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<Protobuf Include="Protos\profile.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\cash.proto" GrpcServices="Client" />
