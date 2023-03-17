@@ -63,6 +63,8 @@ namespace WebApiGateway.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<string>> CreateUser([FromBody] BasicUserModel basicUserModel)
         {
+            // TODO: Add new CreateUserRequest model and inherit it from BasicUserModel.
+            // TODO: add field IEnumerable<Guid> roleIds and validate for count only (count > 0)
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
             var token = HttpContext.RequestAborted;
 
