@@ -65,11 +65,10 @@ namespace WebApiGateway.Controllers
 
             var grpcCreateUserRequest = _mapper.Map<CreateUserRequest>(createUserModel);
 
-            var result = await authClient.CreateUserAsync(grpcCreateUserRequest, cancellationToken: token);
+            var createUserResponse = await authClient.CreateUserAsync(grpcCreateUserRequest, cancellationToken: token);
 
-            var userSimpleModel = _mapper.Map<UserModel>(result.User);
+            var userSimpleModel = _mapper.Map<UserModel>(createUserResponse.User);
 
-            // TODO: Created response with status 201
             return Created("create-user", new ApiResponse<UserModel>(userSimpleModel));
         }
 
