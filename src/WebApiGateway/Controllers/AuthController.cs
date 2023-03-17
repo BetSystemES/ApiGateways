@@ -85,6 +85,7 @@ namespace WebApiGateway.Controllers
 
             var response = _mapper.Map<User, UserModel>(result.User);
 
+            // TODO: Created response with status 201
             return Ok(new ApiResponse<UserModel>(response));
         }
 

@@ -23,6 +23,7 @@ public class AuthControllerTests : BaseTest
     {
         var userId = Guid.NewGuid();
 
+        // Arrange
         // TODO: refactor unit test because CreateUser will not invoke GetAllRoles method.
         var verifier = new AuthControllerTestVerifierBuilder()
             .Prepare()
@@ -36,6 +37,7 @@ public class AuthControllerTests : BaseTest
             .SetCreateUserExpectedResultModel(userId)
             .Build();
 
+        // Act
         var result = await verifier.AuthController.CreateUser(verifier.CreateUserRequestModel);
         result.Result.Should().NotBeNull();
 
@@ -53,6 +55,7 @@ public class AuthControllerTests : BaseTest
         Logger.LogInformation(
             $"verifier.CreateUserExpectedResultModel result: {Serialize(verifier.CreateUserExpectedResultModel)}");
 
+        // Assert
         verifier
             .VerifyGrpcClientFactoryCreateClient()
             .VerifyAuthServiceClientGetAllRolesAsync()
