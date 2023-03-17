@@ -1,8 +1,11 @@
-﻿namespace WebApiGateway.Models.AuthService
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WebApiGateway.Models.AuthService
 {
     public class CreateUserModel : BasicUserModel
     {
-        public List<string> RoleIds { get; set; }
+        [MinLength(1)]
+        public IEnumerable<string> RoleIds { get; set; }
 
         public CreateUserModel()
         {

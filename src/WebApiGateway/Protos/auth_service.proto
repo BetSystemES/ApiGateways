@@ -60,6 +60,7 @@ message CreateUserResponse {
 
 message DeleteUserRequest {
   string user_id = 1;
+  string email = 2;
 }
 
 message DeleteUserResponse {
