@@ -25,7 +25,6 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
-
         [HttpGet("{id}/transactions", Name = nameof(GetTransactionsHistory))]
         public async Task<ActionResult<TransactionModelApi>> GetTransactionsHistory([FromRoute] BaseProfileRequstModel requstModel)
         {
@@ -34,7 +33,7 @@ namespace WebApiGateway.Controllers
 
             var request = new GetTransactionsHistoryRequest()
             {
-               ProfileId = requstModel.ProfileId
+                ProfileId = requstModel.ProfileId
             };
 
             var result = await cashClient.GetTransactionsHistoryAsync(request, cancellationToken: token);
@@ -44,7 +43,7 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<TransactionModelApi>(response));
         }
 
-        [HttpGet("{id}", Name = nameof(GetBalance)) ]
+        [HttpGet("{id}", Name = nameof(GetBalance))]
         public async Task<ActionResult<TransactionModelApi>> GetBalance([FromRoute] BaseProfileRequstModel requstModel)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
@@ -62,14 +61,13 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<TransactionModelApi>(response));
         }
 
-
         [HttpPost("deposit", Name = nameof(Deposit))]
         public async Task<ActionResult> Deposit([FromBody] TransactionModelApi transactionModelApi)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
-            var requestModel = _mapper.Map<TransactionModelApi ,TransactionModel >(transactionModelApi);
+            var requestModel = _mapper.Map<TransactionModelApi, TransactionModel>(transactionModelApi);
 
             var request = new DepositRequest()
             {
@@ -101,14 +99,13 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<TransactionModelApi>(resultModel));
         }
 
-
         [HttpPost("depositrange", Name = nameof(DepositRange))]
         public async Task<ActionResult> DepositRange([FromBody] IEnumerable<TransactionModelApi> transactionModelApis)
         {
             var cashClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
             var token = HttpContext.RequestAborted;
 
-            var requestModel = _mapper.Map< IEnumerable<TransactionModelApi>, IEnumerable<TransactionModel>>(transactionModelApis);
+            var requestModel = _mapper.Map<IEnumerable<TransactionModelApi>, IEnumerable<TransactionModel>>(transactionModelApis);
 
             var request = new DepositRangeRequest();
             request.DepositRangeRequests.AddRange(requestModel);

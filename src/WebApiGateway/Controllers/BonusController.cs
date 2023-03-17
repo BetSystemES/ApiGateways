@@ -28,7 +28,7 @@ namespace WebApiGateway.Controllers
         }
 
         // GET api/bonus/"guid"
-      
+
         [HttpGet("{id}")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] BaseProfileRequstModel requstModel)
@@ -56,7 +56,7 @@ namespace WebApiGateway.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DiscountModel discountModel)
         {
-           var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
 
             var requestModel = _mapper.Map<DiscountModel, Discount>(discountModel);

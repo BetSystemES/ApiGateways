@@ -45,5 +45,6 @@ app.Run();
 
 namespace WebApiGateway
 {
-    public partial class Program { }
+    public partial class Program
+    { }
 }

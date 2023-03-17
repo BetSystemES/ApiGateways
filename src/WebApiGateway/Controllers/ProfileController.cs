@@ -46,7 +46,6 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<ProfileModel>(response));
         }
 
-
         // POST api/profile
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] ProfileModel profileModel)
