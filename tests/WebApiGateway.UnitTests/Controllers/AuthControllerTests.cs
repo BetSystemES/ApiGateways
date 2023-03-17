@@ -26,12 +26,12 @@ public class AuthControllerTests : BaseTest
         // TODO: refactor unit test because CreateUser will not invoke GetAllRoles method.
         var verifier = new AuthControllerTestVerifierBuilder()
             .Prepare()
-            .AddGrpcRoles(AuthRole.User, 1)
-            .SetGrpcGetAllRolesResponse()
-            .SetupGrpcGetAllRolesResponse()
-            .SetGrpcCreateUserResponse(userId)
-            .SetupGrpcCreateUserResponse()
-            .SetupGrpcClientFactory()
+            .AddAuthServiceClientRoles(AuthRole.User, 1)
+            .SetAuthServiceClientGetAllRolesResponse()
+            .SetupAuthServiceClientGetAllRolesResponse()
+            .SetAuthServiceClientCreateUserResponse(userId)
+            .SetupAuthServiceClientCreateUserResponse()
+            .SetupAuthServiceClientGrpcFactory()
             .SetCreateUserRequestModel()
             .SetCreateUserExpectedResultModel(userId)
             .Build();

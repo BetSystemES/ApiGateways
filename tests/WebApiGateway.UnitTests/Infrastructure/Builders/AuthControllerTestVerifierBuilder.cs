@@ -25,11 +25,13 @@ public class AuthControllerTestVerifierBuilder
     private Mock<GrpcClientFactory> _mockGrpcClientFactory = new();
     private Mock<AuthServiceClient> _mockAuthServiceClient = new();
 
+    private RepeatedField<Role> _authServiceClientRoles = new();
+
+    private CreateUserResponse _createAuthServiceClientUserResponse = new();
+    private GetAllRolesResponse _authServiceClientGetAllRolesResponse = new();
+
     private BasicUserModel _createUserRequestModel = new();
-    private CreateUserResponse _createGrpcUserResponse = new();
     private ApiResponse<UserModel> _createUserExpectedResultModel = new();
-    private GetAllRolesResponse _grpcGetAllRolesResponse = new();
-    private RepeatedField<Role> _grpcRoles = new();
 
     public AuthControllerTestVerifierBuilder Prepare()
     {
@@ -51,50 +53,50 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder AddGrpcRoles(AuthRole authRole, int size = 5)
+    public AuthControllerTestVerifierBuilder AddAuthServiceClientRoles(AuthRole authRole, int size = 5)
     {
-        var grpcRoles = Builder<Role>
+        var authServiceClientRoles = Builder<Role>
             .CreateListOfSize(size)
             .All()
             .With(x => x.Id = Guid.NewGuid().ToString())
             .With(x => x.Name = authRole.GetDescription())
             .Build();
 
-        _grpcRoles.Add(grpcRoles);
+        _authServiceClientRoles.Add(authServiceClientRoles);
 
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetGrpcGetAllRolesResponse()
+    public AuthControllerTestVerifierBuilder SetAuthServiceClientGetAllRolesResponse()
     {
-        _grpcGetAllRolesResponse = new GetAllRolesResponse
+        _authServiceClientGetAllRolesResponse = new GetAllRolesResponse
         {
             Roles =
             {
-                _grpcRoles
+                _authServiceClientRoles
             }
         };
 
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetupGrpcGetAllRolesResponse()
+    public AuthControllerTestVerifierBuilder SetupAuthServiceClientGetAllRolesResponse()
     {
-        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_grpcGetAllRolesResponse);
+        var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientGetAllRolesResponse);
 
         _mockAuthServiceClient
             .Setup(f => f.GetAllRolesAsync(
                 It.IsAny<GetAllRolesRequest>(),
                 null, null,
                 It.IsAny<CancellationToken>()))
-            .Returns(grpcAsyncUnaryCall);
+            .Returns(grpcResponse);
 
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetGrpcCreateUserResponse(Guid id, string? email = null, bool? isLocked = null)
+    public AuthControllerTestVerifierBuilder SetAuthServiceClientCreateUserResponse(Guid id, string? email = null, bool? isLocked = null)
     {
-        _createGrpcUserResponse = Builder<CreateUserResponse>
+        _createAuthServiceClientUserResponse = Builder<CreateUserResponse>
             .CreateNew()
             .With(x => x.User = Builder<User>
                 .CreateNew()
@@ -107,9 +109,9 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetupGrpcCreateUserResponse()
+    public AuthControllerTestVerifierBuilder SetupAuthServiceClientCreateUserResponse()
     {
-        var grpcAsyncUnaryCall = GrpcAsyncUnaryCallBuilder(_createGrpcUserResponse);
+        var grpcResponse = GrpcAsyncUnaryCallBuilder(_createAuthServiceClientUserResponse);
 
         _mockAuthServiceClient
             .Setup(f => f.CreateUserAsync(
@@ -117,12 +119,12 @@ public class AuthControllerTestVerifierBuilder
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
-            .Returns(grpcAsyncUnaryCall);
+            .Returns(grpcResponse);
 
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetupGrpcClientFactory()
+    public AuthControllerTestVerifierBuilder SetupAuthServiceClientGrpcFactory()
     {
         _mockGrpcClientFactory
             .Setup(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()))
