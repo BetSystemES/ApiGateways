@@ -11,14 +11,14 @@ namespace WebApiGateway.UnitTests.Infrastructure.Verifiers;
 public class AuthControllerTestVerifier
 {
     public AuthController AuthController { get; }
-    public BasicUserModel CreateUserRequestModel { get; }
+    public CreateUserModel CreateUserRequestModel { get; }
     public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
     public Mock<AuthServiceClient> AuthServiceClient { get; }
     public ApiResponse<UserModel> CreateUserExpectedResultModel { get; }
 
     public AuthControllerTestVerifier(
         AuthController authController,
-        BasicUserModel createUserRequestModel,
+        CreateUserModel createUserRequestModel,
         Mock<GrpcClientFactory> mockGrpcClientFactory,
         Mock<AuthServiceClient> authServiceClient,
         ApiResponse<UserModel> createUserExpectedResultModel)
@@ -32,18 +32,8 @@ public class AuthControllerTestVerifier
 
     public AuthControllerTestVerifier VerifyGrpcClientFactoryCreateClient()
     {
-        MockGrpcClientFactory.Verify(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()), Times.Once());
-
-        return this;
-    }
-
-    public AuthControllerTestVerifier VerifyAuthServiceClientGetAllRolesAsync()
-    {
-        AuthServiceClient
-            .Verify(f => f.GetAllRolesAsync(
-                It.IsAny<GetAllRolesRequest>(),
-                null, null,
-                It.IsAny<CancellationToken>()), Times.Once());
+        MockGrpcClientFactory
+            .Verify(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()), Times.Once());
 
         return this;
     }

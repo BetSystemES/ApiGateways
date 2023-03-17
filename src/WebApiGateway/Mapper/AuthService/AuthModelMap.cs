@@ -4,12 +4,12 @@ using WebApiGateway.Models.AuthService;
 
 namespace WebApiGateway.Mapper.AuthService
 {
-    public class AuthModelMap : Profile
+    public class AuthProfile : Profile
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="AuthModelMap"/> class.
+        /// Initializes a new instance of the <see cref="AuthProfile"/> class.
         /// </summary>
-        public AuthModelMap()
+        public AuthProfile()
         {
             CreateMap<BasicUserModel, AuthenticateRequest>()
                 .ReverseMap();

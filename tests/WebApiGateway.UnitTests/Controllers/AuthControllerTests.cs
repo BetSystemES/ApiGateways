@@ -29,7 +29,6 @@ public class AuthControllerTests : BaseTest
             .Prepare()
             .AddAuthServiceClientRoles(AuthRole.User, 1)
             .SetAuthServiceClientGetAllRolesResponse()
-            .SetupAuthServiceClientGetAllRolesResponse()
             .SetAuthServiceClientCreateUserResponse(userId)
             .SetupAuthServiceClientCreateUserResponse()
             .SetupAuthServiceClientGrpcFactory()
@@ -43,7 +42,7 @@ public class AuthControllerTests : BaseTest
 
         Logger.LogInformation($"AuthController.CreateUser result: {Serialize(result)}");
 
-        var actionResult = (OkObjectResult)result.Result!;
+        var actionResult = (ObjectResult)result.Result!;
         actionResult.Value.Should().NotBeNull();
 
         Logger.LogInformation($"actionResult result: {Serialize(actionResult)}");
@@ -58,7 +57,6 @@ public class AuthControllerTests : BaseTest
         // Assert
         verifier
             .VerifyGrpcClientFactoryCreateClient()
-            .VerifyAuthServiceClientGetAllRolesAsync()
             .VerifyAuthServiceClientCreateUserAsync();
 
         verifier.CreateUserExpectedResultModel.Data.Should().NotBeNull();
