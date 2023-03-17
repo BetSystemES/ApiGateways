@@ -66,9 +66,9 @@ namespace WebApiGateway.Controllers
             var token = HttpContext.RequestAborted;
 
             var getAllRolesRequest = new GetAllRolesRequest();
-            var getAllRolesResponce = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
+            var getAllRolesResponse = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
 
-            var roleId = getAllRolesResponce?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
+            var roleId = getAllRolesResponse?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
 
             CreateUserModel createUserModel = new CreateUserModel(basicUserModel);
             createUserModel.RoleIds.Add(roleId);
@@ -77,9 +77,9 @@ namespace WebApiGateway.Controllers
 
             var result = await authClient.CreateUserAsync(request, cancellationToken: token);
 
-            var responce = _mapper.Map<User, UserModel>(result.User);
+            var response = _mapper.Map<User, UserModel>(result.User);
 
-            return Ok(new ApiResponse<UserModel>(responce));
+            return Ok(new ApiResponse<UserModel>(response));
         }
 
         [HttpPost("get-user")]
@@ -95,9 +95,9 @@ namespace WebApiGateway.Controllers
 
             var result = await authClient.GetUserAsync(request, cancellationToken: token);
 
-            var responce = _mapper.Map<User, UserModel>(result.User);
+            var response = _mapper.Map<User, UserModel>(result.User);
 
-            return Ok(new ApiResponse<UserModel>(responce));
+            return Ok(new ApiResponse<UserModel>(response));
         }
     }
 }

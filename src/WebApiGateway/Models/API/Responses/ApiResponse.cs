@@ -9,9 +9,9 @@
             Data = null;
         }
 
-        public ApiResponse(T responceObject)
+        public ApiResponse(T responseData)
         {
-            Data = responceObject;
+            Data = responseData;
         }
     }
 }

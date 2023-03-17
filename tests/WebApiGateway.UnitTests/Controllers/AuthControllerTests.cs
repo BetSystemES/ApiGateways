@@ -1,169 +1,67 @@
-﻿using AuthService.Grpc;
-using AutoMapper;
-using Grpc.Core;
-using Grpc.Net.ClientFactory;
-using Microsoft.AspNetCore.Http;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Moq;
-using WebApiGateway.Controllers;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
-using static AuthService.Grpc.AuthService;
+using WebApiGateway.Models.AuthService.Enums;
+using WebApiGateway.UnitTests.Infrastructure;
+using WebApiGateway.UnitTests.Infrastructure.Builders;
+using Xunit.Abstractions;
 
-namespace WebApiGateway.UnitTests.Controllers
+namespace WebApiGateway.UnitTests.Controllers;
+
+public class AuthControllerTests : BaseTest
 {
-    public class AuthControllerTests
+    public AuthControllerTests(ITestOutputHelper testOutputHelper, string category = Constants.UnitTest) : base(
+        testOutputHelper, category)
     {
-        private static readonly CancellationToken _ctoken = CancellationToken.None;
+    }
 
-        private readonly Mock<ILogger<AuthController>> _mocklogger;
-        private readonly Mock<GrpcClientFactory> _mockgrpcClientFactory;
-        private readonly Mock<IMapper> _mockmapper;
-        private readonly IMapper _mapper;
+    [Fact]
+    [Trait(Constants.Category, Constants.UnitTest)]
+    public async void CreateUserTest()
+    {
+        var userId = Guid.NewGuid();
 
-        private readonly AuthController _controller;
+        var verifier = new AuthControllerTestBuilder()
+            .Prepare()
+            .AddRoles(AuthRole.User, 1)
+            .SetGetAllRolesResponse()
+            .SetupGetAllRolesResponse()
+            .SetCreateUserResponse(userId)
+            .SetupCreateUserResponse()
+            .SetupGrpcClientFactory()
+            .SetBasicUserModel()
+            .SetExpectedResultUserModel(userId)
+            .Build();
 
-        public AuthControllerTests()
-        {
-            //Init moqs 
-            _mocklogger = new();
-            _mockgrpcClientFactory = new();
-            _mockmapper = new();
+        var result = await verifier.AuthController.CreateUser(verifier.BasicUserModel);
+        result.Result.Should().NotBeNull();
 
-            // Настройка AutoMapper
-            var config = new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap<BasicUserModel, AuthenticateRequest>()
-                        .ReverseMap();
+        Logger.LogInformation($"AuthController.CreateUser result: {Serialize(result)}");
 
-                    cfg.CreateMap<CreateUserModel, CreateUserRequest>()
-                        .ReverseMap();
+        var actionResult = (OkObjectResult) result.Result!;
+        actionResult.Value.Should().NotBeNull();
 
-                    cfg.CreateMap<UserModel, User>()
-                        .ReverseMap();
-                });
-            _mapper = new AutoMapper.Mapper(config);
+        Logger.LogInformation($"actionResult result: {Serialize(actionResult)}");
 
-            //Create Controller
-            _controller = new AuthController(
-                _mocklogger.Object,
-                _mockgrpcClientFactory.Object,
-                _mapper);
+        var apiResponse = (ApiResponse<UserModel>) actionResult.Value!;
+        apiResponse.Should().NotBeNull();
 
-            _controller.ControllerContext.HttpContext = new DefaultHttpContext()
-            {
-                RequestAborted = _ctoken
-            };
-        }
+        Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");
+        Logger.LogInformation(
+            $"verifier.ExpectedResultUserModel result: {Serialize(verifier.ExpectedResultUserModel)}");
 
-        [Fact]
-        public async void CreateUserTest()
-        {
-            //Assert
-            Mock<AuthServiceClient> authServiceClient = new Mock<AuthServiceClient>();
+        verifier
+            .VerifyGrpcClientFactoryCreateClient()
+            .VerifyAuthServiceClientGetAllRolesAsync()
+            .VerifyAuthServiceClientCreateUserAsync();
 
-            GetAllRolesResponse getAllRolesResponse = new GetAllRolesResponse()
-            {
-                Roles =
-                {
-                    new Role()
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = "user"
-                    }
-                }
-            };
+        verifier.ExpectedResultUserModel.Data.Should().NotBeNull();
+        apiResponse.Data.Should().NotBeNull();
 
-            var asyncUnaryCall = AsyncUnaryCallBuilder(getAllRolesResponse);
-
-            authServiceClient
-                 .Setup(f => f.GetAllRolesAsync(
-                     It.IsAny<GetAllRolesRequest>(),
-                     null, null,
-                     It.IsAny<CancellationToken>()))
-                 .Returns(asyncUnaryCall);
-
-            CreateUserResponse createUserResponse = new CreateUserResponse()
-            {
-                User = new User()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Email = "user99@gmail.com",
-                    IsLocked = false
-                }
-            };
-
-            var asyncUnaryCall2 = AsyncUnaryCallBuilder(createUserResponse);
-
-            authServiceClient
-                .Setup(f => f.CreateUserAsync(
-                    It.IsAny<CreateUserRequest>(),
-                    null,
-                    null,
-                    It.IsAny<CancellationToken>()))
-                .Returns(asyncUnaryCall2);
-
-            _mockgrpcClientFactory
-                .Setup(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()))
-                    .Returns(authServiceClient.Object);
-
-            BasicUserModel basicUserModel = new BasicUserModel()
-            {
-                Email = "user99@gmail.com",
-                Password = "12345678Pp!"
-            };
-
-            var responce = new UserModel()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = "user99@gmail.com",
-                IsLocked = false
-            };
-
-            var expectedResult = new ApiResponse<UserModel>(responce);
-
-            //Act
-            var result = await _controller.CreateUser(basicUserModel);
-
-            var okObjectResult = (OkObjectResult)result.Result;
-            var apiValue = (ApiResponse<UserModel>)okObjectResult.Value;
-
-            //Assert
-            //Verify method use
-            _mockgrpcClientFactory
-                .Verify(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()), Times.Once());
-
-            //Verify method use
-            authServiceClient
-                .Verify(f => f.GetAllRolesAsync(
-                    It.IsAny<GetAllRolesRequest>(),
-                    null, null,
-                    It.IsAny<CancellationToken>()), Times.Once());
-
-            //Verify method use
-            authServiceClient
-                .Verify(f => f.CreateUserAsync(
-                It.IsAny<CreateUserRequest>(),
-                null,
-                null,
-                It.IsAny<CancellationToken>()), Times.Once());
-
-            Assert.Equal(expectedResult.Data.Email, apiValue.Data.Email);
-        }
-
-        private AsyncUnaryCall<T> AsyncUnaryCallBuilder<T>(T result) where T : class
-        {
-            AsyncUnaryCall<T> asyncUnaryCall = new AsyncUnaryCall<T>(
-                Task.FromResult(result),
-                null,
-                null,
-                null,
-                null,
-                null
-            );
-
-            return asyncUnaryCall;
-        }
+        verifier.ExpectedResultUserModel.Data!.Id.Should().Be(apiResponse.Data!.Id);
+        verifier.ExpectedResultUserModel.Data.Email.Should().Be(apiResponse.Data.Email);
+        verifier.ExpectedResultUserModel.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
     }
 }
