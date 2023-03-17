@@ -23,6 +23,7 @@ public class AuthControllerTests : BaseTest
     {
         var userId = Guid.NewGuid();
 
+        // TODO: refactor unit test because CreateUser will not invoke GetAllRoles method.
         var verifier = new AuthControllerTestBuilder()
             .Prepare()
             .AddRoles(AuthRole.User, 1)

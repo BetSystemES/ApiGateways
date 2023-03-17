@@ -27,7 +27,7 @@ public class AuthControllerTestBuilder
 
     private BasicUserModel _basicUserModel = new();
     private CreateUserResponse _createUserResponse = new();
-    private ApiResponse<UserModel> _reateUserExpectedResult = new();
+    private ApiResponse<UserModel> _createUserExpectedResult = new();
     private GetAllRolesResponse _getAllRolesResponse = new();
     private RepeatedField<Role> _roles = new();
 
@@ -144,7 +144,7 @@ public class AuthControllerTestBuilder
 
     public AuthControllerTestBuilder SetCreateUserExpectedResult(Guid id, string? email = null, bool? isLocked = null)
     {
-        _reateUserExpectedResult = Builder<ApiResponse<UserModel>>
+        _createUserExpectedResult = Builder<ApiResponse<UserModel>>
             .CreateNew()
             .With(x => x.Data = Builder<UserModel>
                 .CreateNew()
@@ -164,7 +164,7 @@ public class AuthControllerTestBuilder
                 $"{nameof(AuthControllerTestBuilder)} setup is wrong. Use Prepare method before build");
 
         return new AuthControllerTestVerifier(_authController, _basicUserModel, _mockGrpcClientFactory,
-            _mockAuthServiceClient, _reateUserExpectedResult);
+            _mockAuthServiceClient, _createUserExpectedResult);
     }
 
     private AsyncUnaryCall<T> GrpcAsyncUnaryCallBuilder<T>(T result) where T : class
