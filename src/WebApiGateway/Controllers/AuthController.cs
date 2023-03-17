@@ -58,6 +58,7 @@ namespace WebApiGateway.Controllers
 
         }
 
+        // TODO:  Why role ids not in body?
         [HttpPost("create-user")]
         [AllowAnonymous]
         public async Task<ActionResult<string>> CreateUser([FromBody] BasicUserModel basicUserModel)
@@ -65,12 +66,15 @@ namespace WebApiGateway.Controllers
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
             var token = HttpContext.RequestAborted;
 
+            // TODO: for what reason we should get roles from auth service in that case?
             var getAllRolesRequest = new GetAllRolesRequest();
             var getAllRolesResponse = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
 
+            // TODO: Why User Role is default? We should have role ids in request model and just transfer it to auth service.
             var roleId = getAllRolesResponse?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
 
             CreateUserModel createUserModel = new CreateUserModel(basicUserModel);
+            // TODO: take role ids from request model
             createUserModel.RoleIds.Add(roleId);
 
             var request = _mapper.Map<CreateUserModel, CreateUserRequest>(createUserModel);
@@ -99,5 +103,7 @@ namespace WebApiGateway.Controllers
 
             return Ok(new ApiResponse<UserModel>(response));
         }
+
+        // TODO: Add api get roles endpoint (take roles from auth server)???
     }
 }
