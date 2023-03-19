@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
-using WebApiGateway.Models.AuthService.Enums;
-using WebApiGateway.Models.AuthService.Extensions;
 using WebApiGateway.Models.BaseModels;
 using static AuthService.Grpc.AuthService;
+using static WebApiGateway.Models.Constants.PolicyConstants;
 
 namespace WebApiGateway.Controllers
 {
@@ -57,35 +56,20 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<Token>(result.Token));
         }
 
-        // TODO:  Why role ids not in body?
         [HttpPost("create-user")]
         [AllowAnonymous]
-        public async Task<ActionResult<string>> CreateUser([FromBody] BasicUserModel basicUserModel)
+        public async Task<ActionResult<string>> CreateUser([FromBody] CreateUserModel createUserModel)
         {
-            // TODO: Add new CreateUserRequest model and inherit it from BasicUserModel.
-            // TODO: add field IEnumerable<Guid> roleIds and validate for count only (count > 0)
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
             var token = HttpContext.RequestAborted;
 
-            // TODO: for what reason we should get roles from auth service in that case?
-            var getAllRolesRequest = new GetAllRolesRequest();
-            var getAllRolesResponse = await authClient.GetAllRolesAsync(getAllRolesRequest, cancellationToken: token);
+            var grpcCreateUserRequest = _mapper.Map<CreateUserRequest>(createUserModel);
 
-            // TODO: Why User Role is default? We should have role ids in request model and just transfer it to auth service.
-            var roleId = getAllRolesResponse?.Roles?.FirstOrDefault(x => string.Equals(x.Name.ToLower(), AuthRole.User.GetDescription()))?.Id;
+            var createUserResponse = await authClient.CreateUserAsync(grpcCreateUserRequest, cancellationToken: token);
 
-            CreateUserModel createUserModel = new CreateUserModel(basicUserModel);
-            // TODO: take role ids from request model
-            createUserModel.RoleIds.Add(roleId);
+            var userSimpleModel = _mapper.Map<UserModel>(createUserResponse.User);
 
-            var request = _mapper.Map<CreateUserModel, CreateUserRequest>(createUserModel);
-
-            var result = await authClient.CreateUserAsync(request, cancellationToken: token);
-
-            var response = _mapper.Map<User, UserModel>(result.User);
-
-            // TODO: Created response with status 201
-            return Ok(new ApiResponse<UserModel>(response));
+            return Created("create-user", new ApiResponse<UserModel>(userSimpleModel));
         }
 
         [HttpPost("get-user")]
@@ -106,6 +90,20 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<UserModel>(response));
         }
 
-        // TODO: Add api get roles endpoint (take roles from auth server)???
+        [HttpGet("get-all-roles")]
+        [Authorize(Policy = AdminPolicy)]
+        public async Task<ActionResult<string>> GetAllRoles()
+        {
+            var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
+            var token = HttpContext.RequestAborted;
+
+            var request = new GetAllRolesRequest();
+
+            var getAllRolesResponse = await authClient.GetAllRolesAsync(request, cancellationToken: token);
+
+            var allRoles = _mapper.Map<IEnumerable<RoleModel>>(getAllRolesResponse.Roles);
+
+            return Ok(new ApiResponse<IEnumerable<RoleModel>>(allRoles));
+        }
     }
 }

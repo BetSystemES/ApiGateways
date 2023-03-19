@@ -19,6 +19,9 @@ namespace WebApiGateway.Mapper.AuthService
 
             CreateMap<UserModel, User>()
                 .ReverseMap();
+
+            CreateMap<RoleModel, Role>()
+                .ReverseMap();
         }
     }
 }
