@@ -3,34 +3,35 @@ using Grpc.Net.ClientFactory;
 using Moq;
 using WebApiGateway.Controllers;
 using WebApiGateway.Models.API.Responses;
-using WebApiGateway.Models.AuthService;
 using static AuthService.Grpc.AuthService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Verifiers;
 
-public class AuthControllerTestVerifier
+public class AuthControllerTestVerifier<TRequest, TExpectedResult>
+    where TRequest : class
+    where TExpectedResult : class
 {
-    public AuthController AuthController { get; }
-    public CreateUserModel CreateUserRequestModel { get; }
-    public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
-    public Mock<AuthServiceClient> AuthServiceClient { get; }
-    public ApiResponse<UserModel> CreateUserExpectedResultModel { get; }
-
     public AuthControllerTestVerifier(
         AuthController authController,
-        CreateUserModel createUserRequestModel,
+        TRequest createUserRequestModel,
         Mock<GrpcClientFactory> mockGrpcClientFactory,
         Mock<AuthServiceClient> authServiceClient,
-        ApiResponse<UserModel> createUserExpectedResultModel)
+        ApiResponse<TExpectedResult> expectedResult)
     {
         AuthController = authController;
         CreateUserRequestModel = createUserRequestModel;
         MockGrpcClientFactory = mockGrpcClientFactory;
         AuthServiceClient = authServiceClient;
-        CreateUserExpectedResultModel = createUserExpectedResultModel;
+        ExpectedResult = expectedResult;
     }
 
-    public AuthControllerTestVerifier VerifyGrpcClientFactoryCreateClient()
+    public AuthController AuthController { get; }
+    public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
+    public Mock<AuthServiceClient> AuthServiceClient { get; }
+    public TRequest CreateUserRequestModel { get; }
+    public ApiResponse<TExpectedResult> ExpectedResult { get; }
+
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyGrpcClientFactoryCreateClient()
     {
         MockGrpcClientFactory
             .Verify(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()), Times.Once());
@@ -38,7 +39,7 @@ public class AuthControllerTestVerifier
         return this;
     }
 
-    public AuthControllerTestVerifier VerifyAuthServiceClientCreateUserAsync()
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientCreateUserAsync()
     {
         AuthServiceClient
             .Verify(f => f.CreateUserAsync(
@@ -50,7 +51,7 @@ public class AuthControllerTestVerifier
         return this;
     }
 
-    public AuthControllerTestVerifier VerifyAuthServiceClientGetAllRolesAsync()
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientGetAllRolesAsync()
     {
         AuthServiceClient
             .Verify(f => f.GetAllRolesAsync(

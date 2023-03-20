@@ -21,17 +21,18 @@ public class AuthControllerTests : BaseTest
     [Trait(Constants.Category, Constants.UnitTest)]
     public async void CreateUserTest()
     {
+        // Arrange
         var userId = Guid.NewGuid();
 
-        // Arrange
-        var verifier = new AuthControllerTestVerifierBuilder()
+        var verifier = new AuthControllerBaseTestVerifierCreateUserBuilder()
             .Prepare()
             .AddAuthServiceClientRoles(AuthRole.User, 1)
             .SetUserId(userId)
-            .SetupAuthServiceClientCreateUserResponse()
+            .SetAuthServiceClientRequest()
+            .SetAuthServiceClientResponse()
+            .SetupAuthServiceClientResponse()
             .SetupAuthServiceClientGrpcFactory()
-            .SetCreateUserRequestModel()
-            .SetCreateUserExpectedResultModel()
+            .SetExpectedResult()
             .Build();
 
         // Act
@@ -40,28 +41,28 @@ public class AuthControllerTests : BaseTest
 
         Logger.LogInformation($"AuthController.CreateUser result: {Serialize(result)}");
 
-        var actionResult = (ObjectResult)result.Result!;
+        var actionResult = (ObjectResult) result.Result!;
         actionResult.Value.Should().NotBeNull();
 
         Logger.LogInformation($"actionResult result: {Serialize(actionResult)}");
 
-        var apiResponse = (ApiResponse<UserModel>)actionResult.Value!;
+        var apiResponse = (ApiResponse<UserModel>) actionResult.Value!;
         apiResponse.Should().NotBeNull();
 
         Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");
         Logger.LogInformation(
-            $"verifier.CreateUserExpectedResultModel result: {Serialize(verifier.CreateUserExpectedResultModel)}");
+            $"verifier.ExpectedResult result: {Serialize(verifier.ExpectedResult)}");
 
         // Assert
         verifier
             .VerifyGrpcClientFactoryCreateClient()
             .VerifyAuthServiceClientCreateUserAsync();
 
-        verifier.CreateUserExpectedResultModel.Data.Should().NotBeNull();
+        verifier.ExpectedResult.Data.Should().NotBeNull();
         apiResponse.Data.Should().NotBeNull();
 
-        verifier.CreateUserExpectedResultModel.Data!.Id.Should().Be(apiResponse.Data!.Id);
-        verifier.CreateUserExpectedResultModel.Data.Email.Should().Be(apiResponse.Data.Email);
-        verifier.CreateUserExpectedResultModel.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
+        verifier.ExpectedResult.Data!.Id.Should().Be(apiResponse.Data!.Id);
+        verifier.ExpectedResult.Data.Email.Should().Be(apiResponse.Data.Email);
+        verifier.ExpectedResult.Data.IsLocked.Should().Be(apiResponse.Data.IsLocked);
     }
 }
