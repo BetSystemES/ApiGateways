@@ -30,7 +30,8 @@ public class AuthControllerTestVerifierBuilder
     private CreateUserResponse _createAuthServiceClientUserResponse = new();
     private GetAllRolesResponse _authServiceClientGetAllRolesResponse = new();
 
-    private BasicUserModel _createUserRequestModel = new();
+    private CreateUserModel _createUserRequestModel = new();
+    private List<string> _roleIds = new();
     private ApiResponse<UserModel> _createUserExpectedResultModel = new();
 
     public AuthControllerTestVerifierBuilder Prepare()
@@ -38,7 +39,7 @@ public class AuthControllerTestVerifierBuilder
         var mockLogger = new Mock<ILogger<AuthController>>();
         _mockGrpcClientFactory = new Mock<GrpcClientFactory>();
 
-        var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg => { cfg.AddProfile<AuthModelMap>(); }));
+        var mapper = new AutoMapper.Mapper(new MapperConfiguration(cfg => cfg.AddProfile<AuthProfile>()));
 
         _authController = new AuthController(
             mockLogger.Object,
@@ -76,20 +77,6 @@ public class AuthControllerTestVerifierBuilder
                 _authServiceClientRoles
             }
         };
-
-        return this;
-    }
-
-    public AuthControllerTestVerifierBuilder SetupAuthServiceClientGetAllRolesResponse()
-    {
-        var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientGetAllRolesResponse);
-
-        _mockAuthServiceClient
-            .Setup(f => f.GetAllRolesAsync(
-                It.IsAny<GetAllRolesRequest>(),
-                null, null,
-                It.IsAny<CancellationToken>()))
-            .Returns(grpcResponse);
 
         return this;
     }
@@ -133,12 +120,23 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetCreateUserRequestModel(string? email = null, string? password = null)
+    public AuthControllerTestVerifierBuilder SetCreateUserRequestModel(
+        string? email = null,
+        string? password = null,
+        int rolesListSize = 1)
     {
-        _createUserRequestModel = Builder<BasicUserModel>
+        var roleIds = new List<string>();
+        while (rolesListSize > 0)
+        {
+            roleIds.Add(Guid.NewGuid().ToString());
+            rolesListSize--;
+        }
+
+        _createUserRequestModel = Builder<CreateUserModel>
             .CreateNew()
             .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
             .With(x => x.Password = string.IsNullOrEmpty(password) ? "!Qwerty999^" : password)
+            .With(x => x.RoleIds = roleIds)
             .Build();
 
         return this;
@@ -155,6 +153,20 @@ public class AuthControllerTestVerifierBuilder
                 .With(y => y.IsLocked = isLocked.HasValue && isLocked.Value)
                 .Build())
             .Build();
+
+        return this;
+    }
+
+    public AuthControllerTestVerifierBuilder SetupAuthServiceClientGetAllRolesResponse()
+    {
+        var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientGetAllRolesResponse);
+
+        _mockAuthServiceClient
+            .Setup(f => f.GetAllRolesAsync(
+                It.IsAny<GetAllRolesRequest>(),
+                null, null,
+                It.IsAny<CancellationToken>()))
+            .Returns(grpcResponse);
 
         return this;
     }

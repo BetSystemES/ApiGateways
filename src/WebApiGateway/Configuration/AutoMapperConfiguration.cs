@@ -13,7 +13,7 @@ namespace WebApiGateway.Configuration
                 config.AddProfile<ProfileModelMap>();
                 config.AddProfile<DiscountModelMap>();
                 config.AddProfile<TransactionModelApiMap>();
-                config.AddProfile<AuthModelMap>();
+                config.AddProfile<AuthProfile>();
             });
 
             return services;
