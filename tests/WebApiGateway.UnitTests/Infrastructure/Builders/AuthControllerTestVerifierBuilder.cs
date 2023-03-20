@@ -34,6 +34,8 @@ public class AuthControllerTestVerifierBuilder
     private List<string> _roleIds = new();
     private ApiResponse<UserModel> _createUserExpectedResultModel = new();
 
+    private Guid _id;
+
     public AuthControllerTestVerifierBuilder Prepare()
     {
         var mockLogger = new Mock<ILogger<AuthController>>();
@@ -54,12 +56,18 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
+    public AuthControllerTestVerifierBuilder SetUserId(Guid id)
+    {
+        _id  = id;
+        return this;
+    }
+
     public AuthControllerTestVerifierBuilder AddAuthServiceClientRoles(AuthRole authRole, int size = 5)
     {
         var authServiceClientRoles = Builder<Role>
             .CreateListOfSize(size)
             .All()
-            .With(x => x.Id = Guid.NewGuid().ToString())
+            .With(x => x.Id = _id.ToString())
             .With(x => x.Name = authRole.GetDescription())
             .Build();
 
@@ -81,13 +89,13 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetAuthServiceClientCreateUserResponse(Guid id, string? email = null, bool? isLocked = null)
+    public AuthControllerTestVerifierBuilder SetAuthServiceClientCreateUserResponse(string? email = null, bool? isLocked = null)
     {
         _createAuthServiceClientUserResponse = Builder<CreateUserResponse>
             .CreateNew()
             .With(x => x.User = Builder<User>
                 .CreateNew()
-                .With(x => x.Id = id.ToString())
+                .With(x => x.Id = _id.ToString())
                 .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
                 .With(x => x.IsLocked = isLocked.HasValue && isLocked.Value)
                 .Build())
@@ -142,13 +150,13 @@ public class AuthControllerTestVerifierBuilder
         return this;
     }
 
-    public AuthControllerTestVerifierBuilder SetCreateUserExpectedResultModel(Guid id, string? email = null, bool? isLocked = null)
+    public AuthControllerTestVerifierBuilder SetCreateUserExpectedResultModel(string? email = null, bool? isLocked = null)
     {
         _createUserExpectedResultModel = Builder<ApiResponse<UserModel>>
             .CreateNew()
             .With(x => x.Data = Builder<UserModel>
                 .CreateNew()
-                .With(y => y.Id = id.ToString())
+                .With(y => y.Id = _id.ToString())
                 .With(y => y.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
                 .With(y => y.IsLocked = isLocked.HasValue && isLocked.Value)
                 .Build())

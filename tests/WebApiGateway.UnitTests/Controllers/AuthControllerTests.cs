@@ -27,11 +27,11 @@ public class AuthControllerTests : BaseTest
         var verifier = new AuthControllerTestVerifierBuilder()
             .Prepare()
             .AddAuthServiceClientRoles(AuthRole.User, 1)
-            .SetAuthServiceClientCreateUserResponse(userId)
+            .SetUserId(userId)
             .SetupAuthServiceClientCreateUserResponse()
             .SetupAuthServiceClientGrpcFactory()
             .SetCreateUserRequestModel()
-            .SetCreateUserExpectedResultModel(userId)
+            .SetCreateUserExpectedResultModel()
             .Build();
 
         // Act
