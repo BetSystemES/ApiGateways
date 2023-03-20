@@ -49,4 +49,15 @@ public class AuthControllerTestVerifier
 
         return this;
     }
+
+    public AuthControllerTestVerifier VerifyAuthServiceClientGetAllRolesAsync()
+    {
+        AuthServiceClient
+            .Verify(f => f.GetAllRolesAsync(
+                It.IsAny<GetAllRolesRequest>(),
+                null, null,
+                It.IsAny<CancellationToken>()), Times.Once());
+
+        return this;
+    }
 }

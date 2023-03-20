@@ -27,7 +27,6 @@ public class AuthControllerTests : BaseTest
         var verifier = new AuthControllerTestVerifierBuilder()
             .Prepare()
             .AddAuthServiceClientRoles(AuthRole.User, 1)
-            .SetAuthServiceClientGetAllRolesResponse()
             .SetAuthServiceClientCreateUserResponse(userId)
             .SetupAuthServiceClientCreateUserResponse()
             .SetupAuthServiceClientGrpcFactory()

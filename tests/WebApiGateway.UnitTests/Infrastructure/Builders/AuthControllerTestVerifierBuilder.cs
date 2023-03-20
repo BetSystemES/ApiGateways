@@ -123,13 +123,13 @@ public class AuthControllerTestVerifierBuilder
     public AuthControllerTestVerifierBuilder SetCreateUserRequestModel(
         string? email = null,
         string? password = null,
-        int roleIdsNumber = 1)
+        int rolesListSize = 1)
     {
         var roleIds = new List<string>();
-        while (roleIdsNumber > 0)
+        while (rolesListSize > 0)
         {
             roleIds.Add(Guid.NewGuid().ToString());
-            roleIdsNumber--;
+            rolesListSize--;
         }
 
         _createUserRequestModel = Builder<CreateUserModel>
@@ -153,6 +153,20 @@ public class AuthControllerTestVerifierBuilder
                 .With(y => y.IsLocked = isLocked.HasValue && isLocked.Value)
                 .Build())
             .Build();
+
+        return this;
+    }
+
+    public AuthControllerTestVerifierBuilder SetupAuthServiceClientGetAllRolesResponse()
+    {
+        var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientGetAllRolesResponse);
+
+        _mockAuthServiceClient
+            .Setup(f => f.GetAllRolesAsync(
+                It.IsAny<GetAllRolesRequest>(),
+                null, null,
+                It.IsAny<CancellationToken>()))
+            .Returns(grpcResponse);
 
         return this;
     }
