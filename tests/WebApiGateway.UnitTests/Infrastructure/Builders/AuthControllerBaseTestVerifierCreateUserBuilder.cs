@@ -5,8 +5,7 @@ using WebApiGateway.Models.AuthService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
-public class
-    AuthControllerBaseTestVerifierCreateUserBuilder : AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
+public class AuthControllerBaseTestVerifierCreateUserBuilder : AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
 {
     public override AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
         SetAuthServiceClientRequest(
