@@ -41,14 +41,14 @@ namespace WebApiGateway.Controllers
         }
 
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<string>> RefreshToken([FromBody] string authToken)
+        public async Task<ActionResult<string>> RefreshToken([FromBody] BasicTokenModel basicTokenModel)
         {
             var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
             var token = HttpContext.RequestAborted;
 
             var request = new RefreshRequest()
             {
-                RefreshToken = authToken
+                RefreshToken = basicTokenModel.AuthToken
             };
 
             var result = await authClient.RefreshAsync(request, cancellationToken: token);

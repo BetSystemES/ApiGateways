@@ -13,13 +13,13 @@ public class AuthControllerTestVerifier<TRequest, TExpectedResult>
 {
     public AuthControllerTestVerifier(
         AuthController authController,
-        TRequest createUserRequestModel,
+        TRequest requestModel,
         Mock<GrpcClientFactory> mockGrpcClientFactory,
         Mock<AuthServiceClient> authServiceClient,
         ApiResponse<TExpectedResult> expectedResult)
     {
         AuthController = authController;
-        CreateUserRequestModel = createUserRequestModel;
+        RequestModel = requestModel;
         MockGrpcClientFactory = mockGrpcClientFactory;
         AuthServiceClient = authServiceClient;
         ExpectedResult = expectedResult;
@@ -28,7 +28,7 @@ public class AuthControllerTestVerifier<TRequest, TExpectedResult>
     public AuthController AuthController { get; }
     public Mock<GrpcClientFactory> MockGrpcClientFactory { get; }
     public Mock<AuthServiceClient> AuthServiceClient { get; }
-    public TRequest CreateUserRequestModel { get; }
+    public TRequest RequestModel { get; }
     public ApiResponse<TExpectedResult> ExpectedResult { get; }
 
     public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyGrpcClientFactoryCreateClient()
@@ -44,6 +44,42 @@ public class AuthControllerTestVerifier<TRequest, TExpectedResult>
         AuthServiceClient
             .Verify(f => f.CreateUserAsync(
                 It.IsAny<CreateUserRequest>(),
+                null,
+                null,
+                It.IsAny<CancellationToken>()), Times.Once());
+
+        return this;
+    }
+
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientAuthenticateAsync()
+    {
+        AuthServiceClient
+            .Verify(f => f.AuthenticateAsync(
+                It.IsAny<AuthenticateRequest>(),
+                null,
+                null,
+                It.IsAny<CancellationToken>()), Times.Once());
+
+        return this;
+    }
+
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientRefreshAsync()
+    {
+        AuthServiceClient
+            .Verify(f => f.RefreshAsync(
+                It.IsAny<RefreshRequest>(),
+                null,
+                null,
+                It.IsAny<CancellationToken>()), Times.Once());
+
+        return this;
+    }
+
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientGetUserAsync()
+    {
+        AuthServiceClient
+            .Verify(f => f.GetUserAsync(
+                It.IsAny<GetUserRequest>(),
                 null,
                 null,
                 It.IsAny<CancellationToken>()), Times.Once());

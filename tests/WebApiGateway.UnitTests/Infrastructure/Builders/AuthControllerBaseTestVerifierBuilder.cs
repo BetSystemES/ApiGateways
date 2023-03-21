@@ -19,15 +19,14 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
 public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
     where TRequest : class, new()
-    where TResponse : class
+    where TResponse : class, new()
     where TExpectedResult : class
 {
     protected AuthController? _authController;
     protected GetAllRolesResponse _authServiceClientGetAllRolesResponse = new();
 
     protected TRequest _authServiceClientRequest = new();
-
-    protected CreateUserResponse _authServiceClientResponse = new();
+    protected TResponse _authServiceClientResponse = new();
 
     protected RepeatedField<Role> _authServiceClientRoles = new();
     protected ApiResponse<TExpectedResult> _expectedResult = new();
@@ -59,16 +58,16 @@ public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse,
     }
 
     public abstract AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
-        SetAuthServiceClientRequest(
-            string? email = null,
-            string? password = null,
-            int rolesListSize = 1);
+        SetAuthServiceClientRequest(params string[] paramsStrings);
 
     public abstract AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
-        SetAuthServiceClientResponse(string? email = null, bool? isLocked = null);
+        SetAuthServiceClientResponse(params string[] paramsStrings);
 
-    public abstract AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult> SetExpectedResult(
-        string? email = null, bool? isLocked = null);
+    public abstract AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
+        SetupAuthServiceClientResponse();
+
+    public abstract AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
+        SetExpectedResult(params string[] paramsStrings);
 
     public AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult> SetUserId(Guid id)
     {
@@ -101,21 +100,6 @@ public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse,
                 _authServiceClientRoles
             }
         };
-
-        return this;
-    }
-
-    public AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult> SetupAuthServiceClientResponse()
-    {
-        var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientResponse);
-
-        _mockAuthServiceClient
-            .Setup(f => f.CreateUserAsync(
-                It.IsAny<CreateUserRequest>(),
-                null,
-                null,
-                It.IsAny<CancellationToken>()))
-            .Returns(grpcResponse);
 
         return this;
     }
@@ -156,7 +140,7 @@ public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse,
             _mockAuthServiceClient, _expectedResult);
     }
 
-    private AsyncUnaryCall<T> GrpcAsyncUnaryCallBuilder<T>(T result) where T : class
+    protected AsyncUnaryCall<T> GrpcAsyncUnaryCallBuilder<T>(T result) where T : class
     {
         var asyncUnaryCall = new AsyncUnaryCall<T>(
             Task.FromResult(result),
