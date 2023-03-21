@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using AuthService.Grpc;
+﻿using AuthService.Grpc;
 using FizzWare.NBuilder;
-using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Moq;
-using System.Collections.Generic;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
 using WebApiGateway.Models.AuthService.Enums;

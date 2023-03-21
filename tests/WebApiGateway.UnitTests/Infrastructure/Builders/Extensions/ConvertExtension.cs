@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace WebApiGateway.UnitTests.Infrastructure.Builders.Extenstions
+namespace WebApiGateway.UnitTests.Infrastructure.Builders.Extensions
 {
     public static class ConvertExtension
     {
@@ -11,7 +11,6 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.Extenstions
                 var converter = TypeDescriptor.GetConverter(typeof(T));
                 if (converter != null)
                 {
-                    // Cast ConvertFromString(string text) : object to (T)
                     return (T)converter.ConvertFromString(input);
                 }
                 return default(T);

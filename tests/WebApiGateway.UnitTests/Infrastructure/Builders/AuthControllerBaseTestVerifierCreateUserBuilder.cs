@@ -3,8 +3,8 @@ using FizzWare.NBuilder;
 using Moq;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
-using WebApiGateway.UnitTests.Infrastructure.Builders.Extenstions;
-using static WebApiGateway.UnitTests.Infrastructure.Builders.Support;
+using WebApiGateway.UnitTests.Infrastructure.Builders.Extensions;
+using static WebApiGateway.UnitTests.Infrastructure.Builders.Helpers.GuidHelper;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
@@ -17,13 +17,13 @@ public class AuthControllerBaseTestVerifierCreateUserBuilder : AuthControllerBas
         string? password = paramsStrings.ElementAtOrDefault(1);
         int rolesListSize = int.TryParse(paramsStrings.ElementAtOrDefault(2), out int result) ? result : 1;
 
-        var roleIds = GenerateRoleIds(rolesListSize);
+        var roleIds = GenerateGuidList(rolesListSize);
 
         _authServiceClientRequest = Builder<CreateUserModel>
             .CreateNew()
             .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
             .With(x => x.Password = string.IsNullOrEmpty(password) ? "!Qwerty999^" : password)
-            .With(x => x.RoleIds = roleIds)
+            .With(x => x.RoleIds = roleIds.Select(guid=> guid.ToString()))
             .Build();
 
         return this;
@@ -34,7 +34,6 @@ public class AuthControllerBaseTestVerifierCreateUserBuilder : AuthControllerBas
     {
         string? email = paramsStrings.ElementAtOrDefault(0);
         bool? isLocked = paramsStrings.ElementAtOrDefault(1).Convert<bool>();
-        //bool isLocked = bool.TryParse(paramsStrings.ElementAtOrDefault(1), out var result) ? result : false;
 
         _authServiceClientResponse = Builder<CreateUserResponse>
             .CreateNew()

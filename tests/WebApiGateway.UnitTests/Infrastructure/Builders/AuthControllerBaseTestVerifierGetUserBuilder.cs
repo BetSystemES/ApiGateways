@@ -4,8 +4,7 @@ using Moq;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
 using WebApiGateway.Models.BaseModels;
-using WebApiGateway.UnitTests.Infrastructure.Builders.Extenstions;
-using static WebApiGateway.UnitTests.Infrastructure.Builders.Support;
+using WebApiGateway.UnitTests.Infrastructure.Builders.Extensions;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
