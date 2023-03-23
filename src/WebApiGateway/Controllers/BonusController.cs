@@ -6,6 +6,7 @@ using ProfileService.GRPC;
 using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.BaseModels;
+using WebApiGateway.Models.BonusService;
 using WebApiGateway.Models.ProfileService;
 using static ProfileService.GRPC.ProfileService;
 using static WebApiGateway.Models.Constants.PolicyConstants;
@@ -45,6 +46,37 @@ namespace WebApiGateway.Controllers
             };
 
             var result = await profileClient.GetDiscountsAsync(request, cancellationToken: token);
+
+            List<DiscountModel> response = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
+
+            return Ok(new ApiResponse<List<DiscountModel>>(response));
+        }
+
+        [HttpGet]
+        [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
+        public async Task<ActionResult<List<DiscountModel>>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
+        {
+            var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
+            var token = HttpContext.RequestAborted;
+
+            var request = new GetDiscountsWithFilterRequest()
+            {
+                ProfileByIdRequest = new ProfileByIdRequest()
+                {
+                    Id = requstModel.ProfileId
+                },
+                DiscountFilter = new DiscountFilter()
+                {
+                    ColumnName = requstModel.ColumnName,
+                    IsEnabled = requstModel.IsEnabled,
+                    OrderDirection = requstModel.OrderDirection,
+                    PageNumber = requstModel.PageNumber,
+                    PageSize = requstModel.PageSize,
+                    SearchCriteria = requstModel.SearchCriteria
+                }
+            };
+
+            var result = await profileClient.GetPagedDiscountsAsync(request, cancellationToken: token);
 
             List<DiscountModel> response = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
 
