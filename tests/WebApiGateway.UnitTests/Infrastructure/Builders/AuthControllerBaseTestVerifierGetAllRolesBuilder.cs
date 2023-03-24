@@ -40,7 +40,8 @@ public class AuthControllerBaseTestVerifierGetAllRolesBuilder : AuthControllerBa
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
-            .Returns(grpcResponse);
+            .Returns(grpcResponse)
+            .Verifiable();
 
         return this;
     }

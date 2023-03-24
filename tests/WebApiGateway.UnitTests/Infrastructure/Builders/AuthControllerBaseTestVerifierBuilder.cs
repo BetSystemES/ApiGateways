@@ -109,7 +109,8 @@ public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse,
     {
         _mockGrpcClientFactory
             .Setup(f => f.CreateClient<AuthServiceClient>(It.IsAny<string>()))
-            .Returns(_mockAuthServiceClient.Object);
+            .Returns(_mockAuthServiceClient.Object)
+            .Verifiable();
 
         return this;
     }
@@ -124,7 +125,8 @@ public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse,
                 It.IsAny<GetAllRolesRequest>(),
                 null, null,
                 It.IsAny<CancellationToken>()))
-            .Returns(grpcResponse);
+            .Returns(grpcResponse)
+            .Verifiable();
 
         return this;
     }

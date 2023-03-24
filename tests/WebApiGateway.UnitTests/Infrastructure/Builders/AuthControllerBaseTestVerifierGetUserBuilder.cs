@@ -53,7 +53,8 @@ public class AuthControllerBaseTestVerifierGetUserBuilder : AuthControllerBaseTe
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
-            .Returns(grpcResponse);
+            .Returns(grpcResponse)
+            .Verifiable();
 
         return this;
     }
