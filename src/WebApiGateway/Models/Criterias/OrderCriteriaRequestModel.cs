@@ -1,8 +1,6 @@
-﻿using WebApiGateway.Models.FilterCriteria.Enums;
+﻿using OrderDirection = ProfileService.GRPC.OrderDirection;
 
-using OrderDirection = ProfileService.GRPC.OrderDirection;
-
-namespace WebApiGateway.Models.FilterCriteria
+namespace WebApiGateway.Models.Criterias
 {
     public class OrderCriteriaRequestModel : PaginationCriteriaRequestModel
     {

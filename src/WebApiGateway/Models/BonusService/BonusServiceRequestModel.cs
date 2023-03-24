@@ -1,4 +1,4 @@
-﻿using WebApiGateway.Models.FilterCriteria;
+﻿using WebApiGateway.Models.Criterias;
 
 namespace WebApiGateway.Models.BonusService
 {

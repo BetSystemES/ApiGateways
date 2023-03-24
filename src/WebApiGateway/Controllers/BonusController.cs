@@ -28,11 +28,9 @@ namespace WebApiGateway.Controllers
             _mapper = mapper;
         }
 
-        // GET api/bonus/"guid"
-
-        [HttpGet("{id}")]
+        [HttpGet("get-discounts")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
-        public async Task<ActionResult<List<DiscountModel>>> Get([FromRoute] BaseProfileRequstModel requstModel)
+        public async Task<ActionResult<List<DiscountModel>>> GetDiscounts([FromRoute] BaseProfileRequstModel requstModel)
         {
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
@@ -52,7 +50,7 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<List<DiscountModel>>(response));
         }
 
-        [HttpGet]
+        [HttpGet("get-paged-discounts")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
         public async Task<ActionResult<BonusPagedResponseModel>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
         {

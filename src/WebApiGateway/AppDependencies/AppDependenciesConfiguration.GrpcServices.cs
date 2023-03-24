@@ -1,5 +1,4 @@
 ﻿using Grpc.Net.Client.Configuration;
-using Microsoft.Extensions.Options;
 using WebApiGateway.Services.Contracts;
 using WebApiGateway.Settings;
 using static AuthService.Grpc.AuthService;

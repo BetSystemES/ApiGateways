@@ -1,4 +1,4 @@
-﻿namespace WebApiGateway.Models.FilterCriteria.Enums
+﻿namespace WebApiGateway.Models.Criterias.Enums
 {
     public enum OrderDirection
     {

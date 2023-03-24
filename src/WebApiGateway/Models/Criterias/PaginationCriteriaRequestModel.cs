@@ -1,4 +1,4 @@
-﻿namespace WebApiGateway.Models.FilterCriteria
+﻿namespace WebApiGateway.Models.Criterias
 {
     public class PaginationCriteriaRequestModel
     {
