@@ -54,7 +54,7 @@ namespace WebApiGateway.Controllers
 
         [HttpGet]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
-        public async Task<ActionResult<List<DiscountModel>>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
+        public async Task<ActionResult<BonusPagedResponseModel>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
         {
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
@@ -68,19 +68,25 @@ namespace WebApiGateway.Controllers
                 DiscountFilter = new DiscountFilter()
                 {
                     ColumnName = requstModel.ColumnName,
-                    IsEnabled = requstModel.IsEnabled,
-                    OrderDirection = requstModel.OrderDirection,
-                    PageNumber = requstModel.PageNumber,
-                    PageSize = requstModel.PageSize,
+                    IsEnabled = requstModel.IsEnabled.ToString(),
+                    OrderDirection = requstModel.OrderDirection ?? 0,
+                    PageNumber = requstModel.PageNumber ?? -1,
+                    PageSize = requstModel.PageSize ?? -1,
                     SearchCriteria = requstModel.SearchCriteria
                 }
             };
 
             var result = await profileClient.GetPagedDiscountsAsync(request, cancellationToken: token);
 
-            List<DiscountModel> response = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
+            List<DiscountModel> discountModels = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
 
-            return Ok(new ApiResponse<List<DiscountModel>>(response));
+            var response = new BonusPagedResponseModel()
+            {
+                Data = discountModels,
+                TotalCount = result.TotalCount
+            };
+
+            return Ok(new ApiResponse<BonusPagedResponseModel>(response));
         }
 
         // POST api/bonus

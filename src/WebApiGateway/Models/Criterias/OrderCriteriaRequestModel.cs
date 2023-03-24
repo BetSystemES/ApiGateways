@@ -7,6 +7,6 @@ namespace WebApiGateway.Models.FilterCriteria
     public class OrderCriteriaRequestModel : PaginationCriteriaRequestModel
     {
         public string? ColumnName { get; set; }
-        public OrderDirection OrderDirection { get; set; }
+        public OrderDirection? OrderDirection { get; set; }
     }
 }
