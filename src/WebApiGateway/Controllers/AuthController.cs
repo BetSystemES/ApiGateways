@@ -105,5 +105,21 @@ namespace WebApiGateway.Controllers
 
             return Ok(new ApiResponse<IEnumerable<RoleModel>>(allRoles));
         }
+
+        [HttpGet("get-default-roles")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> GetDefaultRoles()
+        {
+            var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
+            var token = HttpContext.RequestAborted;
+
+            var request = new GetDefaultRolesRequest();
+
+            var getAllRolesResponse = await authClient.GetDefaultRolesAsync(request, cancellationToken: token);
+
+            var allRoles = _mapper.Map<IEnumerable<RoleModel>>(getAllRolesResponse.Roles);
+
+            return Ok(new ApiResponse<IEnumerable<RoleModel>>(allRoles));
+        }
     }
 }
