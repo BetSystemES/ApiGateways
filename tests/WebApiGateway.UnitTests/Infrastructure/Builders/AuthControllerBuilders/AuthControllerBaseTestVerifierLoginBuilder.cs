@@ -4,31 +4,33 @@ using Moq;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
 
-namespace WebApiGateway.UnitTests.Infrastructure.Builders;
+namespace WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
 
-public class AuthControllerBaseTestVerifierRefreshTokenBuilder : AuthControllerBaseTestVerifierBuilder<BasicTokenModel, RefreshResponse, Token>
+public class AuthControllerBaseTestVerifierLoginBuilder : AuthControllerBaseTestVerifierBuilder<BasicUserModel, AuthenticateResponse, Token>
 {
-    public override AuthControllerBaseTestVerifierBuilder<BasicTokenModel, RefreshResponse, Token>
+    public override AuthControllerBaseTestVerifierBuilder<BasicUserModel, AuthenticateResponse, Token>
         SetAuthServiceClientRequest(params string[] paramsStrings)
     {
-        string? token = paramsStrings.ElementAtOrDefault(0);
+        string? email = paramsStrings.ElementAtOrDefault(0);
+        string? password = paramsStrings.ElementAtOrDefault(1);
 
-        _authServiceClientRequest = Builder<BasicTokenModel>
+        _authServiceClientRequest = Builder<BasicUserModel>
             .CreateNew()
-            .With(x => x.AuthToken = string.IsNullOrEmpty(token) ? "kjnajfnshnfsj" : token)
+            .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
+            .With(x => x.Password = string.IsNullOrEmpty(password) ? "!Qwerty999^" : password)
             .Build();
 
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BasicTokenModel, RefreshResponse, Token>
+    public override AuthControllerBaseTestVerifierBuilder<BasicUserModel, AuthenticateResponse, Token>
         SetAuthServiceClientResponse(params string[] paramsStrings)
     {
         Token token = Builder<Token>
             .CreateNew()
             .Build();
 
-        _authServiceClientResponse = Builder<RefreshResponse>
+        _authServiceClientResponse = Builder<AuthenticateResponse>
             .CreateNew()
             .With(x => x.Token = token)
             .Build();
@@ -36,14 +38,14 @@ public class AuthControllerBaseTestVerifierRefreshTokenBuilder : AuthControllerB
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BasicTokenModel, RefreshResponse, Token>
+    public override AuthControllerBaseTestVerifierBuilder<BasicUserModel, AuthenticateResponse, Token>
         SetupAuthServiceClientResponse()
     {
         var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientResponse);
 
         _mockAuthServiceClient
-            .Setup(f => f.RefreshAsync(
-                It.IsAny<RefreshRequest>(),
+            .Setup(f => f.AuthenticateAsync(
+                It.IsAny<AuthenticateRequest>(),
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
@@ -53,7 +55,7 @@ public class AuthControllerBaseTestVerifierRefreshTokenBuilder : AuthControllerB
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BasicTokenModel, RefreshResponse, Token>
+    public override AuthControllerBaseTestVerifierBuilder<BasicUserModel, AuthenticateResponse, Token>
         SetExpectedResult(params string[] paramsStrings)
     {
         _expectedResult = Builder<ApiResponse<Token>>
