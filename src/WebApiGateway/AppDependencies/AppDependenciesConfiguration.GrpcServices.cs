@@ -1,4 +1,5 @@
 ﻿using Grpc.Net.Client.Configuration;
+using WebApiGateway.Services.Contracts;
 using WebApiGateway.Settings;
 using static AuthService.Grpc.AuthService;
 using static CashService.GRPC.CashService;
@@ -30,21 +31,40 @@ namespace WebApiGateway.AppDependencies
             ArgumentNullException.ThrowIfNull(serviceEndpoint, nameof(serviceEndpoint));
 
             return services
-                .AddGrpcServiceClient<T>(serviceName, serviceEndpoint.Url);
+                .AddGrpcServiceClient<T>(serviceName, serviceEndpoint.Url)
+                .AddCallCredentialsToClient(serviceEndpointsSettings.IsUseTokenTransfer);
         }
 
-        private static IServiceCollection AddGrpcServiceClient<TClient>(this IServiceCollection services, string clientName, string endpoint) where TClient : class
+        private static IHttpClientBuilder AddGrpcServiceClient<TClient>(this IServiceCollection services, 
+            string clientName, string endpoint) where TClient : class
         {
             return services
                 .AddGrpcClient<TClient>(clientName, options =>
                 {
                     options.Address = new Uri(endpoint);
-                    options.ChannelOptionsActions.Add(options =>
+                    options.ChannelOptionsActions.Add(channelOptions =>
                     {
-                        options.ServiceConfig = new ServiceConfig { MethodConfigs = { DefaultMethodConfig } };
+                        channelOptions.ServiceConfig = new ServiceConfig { MethodConfigs = { DefaultMethodConfig } };
+                        channelOptions.UnsafeUseInsecureChannelCallCredentials = true;
                     });
-                })
-                .Services;
+
+                });
+        }
+
+        private static IServiceCollection AddCallCredentialsToClient(this IHttpClientBuilder clientBuilder, bool isUseTokenTransfer)
+        {
+            if (isUseTokenTransfer)
+            {
+                clientBuilder
+                    .AddCallCredentials((context, metadata, serviceProvider) =>
+                    {
+                        var provider = serviceProvider.GetRequiredService<IAuthClaimService>();
+                        var token = provider.GetToken();
+                        metadata.Add("Authorization", $"{token}");
+                        return Task.CompletedTask;
+                    });
+            }
+            return clientBuilder.Services;
         }
     }
 }

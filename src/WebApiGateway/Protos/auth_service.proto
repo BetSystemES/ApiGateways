@@ -21,6 +21,9 @@ service AuthService {
 
   rpc GetAllRoles(GetAllRolesRequest)
     returns (GetAllRolesResponse);
+
+  rpc GetDefaultRoles(GetDefaultRolesRequest)
+    returns (GetDefaultRolesResponse);
 }
 
 message AuthenticateRequest {
@@ -70,6 +73,13 @@ message GetAllRolesRequest {
 }
 
 message GetAllRolesResponse {
+  repeated Role roles = 1;
+}
+
+message GetDefaultRolesRequest {
+}
+
+message GetDefaultRolesResponse {
   repeated Role roles = 1;
 }
 
