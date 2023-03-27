@@ -90,6 +90,19 @@ namespace WebApiGateway.Controllers
             return Ok(new ApiResponse<UserModel>(response));
         }
 
+        [HttpPost("delete-user")]
+        public async Task<ActionResult<string>> DeleteUser([FromBody] DeleteUserModel deleteUserModel)
+        {
+            var authClient = _grpcClientFactory.CreateClient<AuthServiceClient>(nameof(AuthServiceClient));
+            var token = HttpContext.RequestAborted;
+
+            var grpcDeleteUserRequest = _mapper.Map<DeleteUserRequest>(deleteUserModel);
+
+            var deleteUserResponse = await authClient.DeleteUserAsync(grpcDeleteUserRequest, cancellationToken: token);
+
+            return Ok(new ApiResponse<string>());
+        }
+
         [HttpGet("get-all-roles")]
         [Authorize(Policy = AdminPolicy)]
         public async Task<ActionResult<string>> GetAllRoles()
