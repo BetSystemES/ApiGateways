@@ -7,8 +7,9 @@ namespace WebApiGateway.Models.ProfileService
     {
         public string Id { get; set; }
         public bool IsAlreadyUsed { get; set; }
+        public bool IsEnabled { get; set; }
         public DiscountModelType Type { get; set; }
         public double Amount { get; set; }
-        public double DiscountValue { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
     }
 }
