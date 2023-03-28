@@ -36,7 +36,7 @@ namespace WebApiGateway.Mapper.ProfileService
                         opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(dest => dest.CreateDate,
                     opt =>
-                        opt.MapFrom(src => src.CreateDate.ToTimestamp()))
+                        opt.MapFrom(src => Timestamp.FromDateTimeOffset(src.CreateDate)))
                 .ForMember(dest => dest.Type,
                     opt =>
                         opt.MapFrom(src => src.Type));

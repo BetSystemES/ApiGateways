@@ -61,8 +61,9 @@ namespace WebApiGateway.Controllers
                     OrderDirection = (OrderDirection) (requstModel.OrderDirection ?? 0),
                     PageNumber = requstModel.PageNumber ?? -1,
                     PageSize = requstModel.PageSize ?? -1,
-                    StartDate = (requstModel.StartDate ?? DateTimeOffset.MinValue).ToTimestamp(),
-                    EndDate = (requstModel.EndDate ?? DateTimeOffset.MinValue).ToTimestamp(),
+                    StartDate = Timestamp.FromDateTimeOffset(requstModel.StartDate ?? DateTimeOffset.MinValue),
+                    EndDate = Timestamp.FromDateTimeOffset(requstModel.EndDate ?? DateTimeOffset.MinValue),
+                    SearchCriteria = requstModel.SearchCriteria
                 }
             };
 
