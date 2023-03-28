@@ -2,12 +2,15 @@ syntax = "proto3";
 
 option csharp_namespace = "CashService.GRPC";
 
+import "google/protobuf/timestamp.proto";
+
 package cash;
 
 // The CashService definition.
 service CashService {
 
   rpc GetTransactionsHistory (GetTransactionsHistoryRequest) returns (GetTransactionsHistoryResponse);
+  rpc GetPagedTransactionHistory (GetTransactionHistoryWithFilterRequest) returns (GetPagedTransactionsHistoryResponse);
   rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponse);
   rpc Deposit (DepositRequest) returns (DepositResponse);
   rpc Withdraw (WithdrawRequest) returns (WithdrawResponse);
@@ -21,6 +24,15 @@ message GetTransactionsHistoryRequest {
 }
 message GetTransactionsHistoryResponse {
 	TransactionModel balance = 1;
+}
+
+message GetTransactionHistoryWithFilterRequest {
+	string profile_id = 1;
+	TransactionHistoryFilter transaction_history_filter = 2;
+}
+message GetPagedTransactionsHistoryResponse {
+	int32 total_count = 1;
+	repeated Transaction transactions = 2;
 }
 
 message GetBalanceRequest {
@@ -68,6 +80,7 @@ message Transaction
 	string transaction_id = 1; 
 	CashType cash_type = 2;
 	double amount = 3;
+	google.protobuf.Timestamp date = 4;
 }
 
 enum CashType
@@ -75,4 +88,24 @@ enum CashType
 	CASH_TYPE_UNSPECIFIED = 0;
 	CASH_TYPE_CASH=1;
 	CASH_TYPE_BONUS=2;
+}
+
+enum OrderDirection {
+	ORDER_DIRECTION_UNSPECIFIED = 0;
+	ORDER_DIRECTION_ASCENDING = 1;
+	ORDER_DIRECTION_DESCENDING = 2;
+}
+
+message TransactionHistoryFilter {
+	int32 page_number = 1;
+	int32 page_size = 2;
+	string column_name = 3;
+	OrderDirection order_direction = 4;
+	repeated string user_ids = 5;
+	CashType cash_type = 6;
+	double startAmount = 7;
+	double endAmount = 8;
+	google.protobuf.Timestamp start_date = 9;
+	google.protobuf.Timestamp end_date = 10;
+	string search_criteria = 11;
 }
