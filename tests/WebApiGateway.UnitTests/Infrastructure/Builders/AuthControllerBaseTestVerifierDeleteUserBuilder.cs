@@ -3,6 +3,7 @@ using FizzWare.NBuilder;
 using Moq;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
+using WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders;
 
