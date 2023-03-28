@@ -1,4 +1,4 @@
-﻿using OrderDirection = ProfileService.GRPC.OrderDirection;
+﻿using WebApiGateway.Models.Criterias.Enums;
 
 namespace WebApiGateway.Models.Criterias
 {

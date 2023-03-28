@@ -2,14 +2,15 @@
 using Moq;
 using ProfileService.GRPC;
 using WebApiGateway.Models.API.Responses;
+using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Models.BonusService;
 using WebApiGateway.Models.ProfileService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilders
 {
-    public class BonusControllerBaseTestVerifierGetPagedDiscountsBuilder : BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BonusPagedResponseModel>
+    public class BonusControllerBaseTestVerifierGetPagedDiscountsBuilder : BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BasePagedResponseModel<DiscountModel>>
     {
-        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BonusPagedResponseModel>
+        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BasePagedResponseModel<DiscountModel>>
             SetProfileServiceClientRequest(params string[] paramsStrings)
         {
             string? userId = paramsStrings.ElementAtOrDefault(0);
@@ -22,7 +23,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilder
             return this;
         }
 
-        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BonusPagedResponseModel>
+        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BasePagedResponseModel<DiscountModel>>
             SetProfileServiceClientResponse(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
@@ -44,7 +45,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilder
             return this;
         }
 
-        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BonusPagedResponseModel>
+        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BasePagedResponseModel<DiscountModel>>
             SetupProfileServiceClientResponse()
         {
             var grpcResponse = GrpcAsyncUnaryCallBuilder(_bonusServiceClientResponse);
@@ -61,7 +62,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilder
             return this;
         }
 
-        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BonusPagedResponseModel>
+        public override BonusControllerBaseTestVerifierBuilder<BonusServiceRequestModel, GetPagedDiscountsResponse, BasePagedResponseModel<DiscountModel>>
             SetExpectedResult(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
@@ -72,9 +73,9 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilder
                 .With(x => x.Id = id ?? Guid.NewGuid().ToString())
                 .Build();
 
-            _expectedResult = Builder<ApiResponse<BonusPagedResponseModel>>
+            _expectedResult = Builder<ApiResponse<BasePagedResponseModel<DiscountModel>>>
                 .CreateNew()
-                .With(x => x.Data = Builder<BonusPagedResponseModel>
+                .With(x => x.Data = Builder<BasePagedResponseModel<DiscountModel>>
                     .CreateNew()
                     .With(y => y.Data = discounts.ToList())
                     .Build())

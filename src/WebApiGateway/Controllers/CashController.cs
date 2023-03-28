@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CashService.GRPC;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Models.CashService;
@@ -41,6 +43,41 @@ namespace WebApiGateway.Controllers
             var response = _mapper.Map<TransactionModel, TransactionModelApi>(result.Balance);
 
             return Ok(new ApiResponse<TransactionModelApi>(response));
+        }
+
+        [HttpGet("get-paged-transaction-history")]
+        [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<TransactionModelApi>))]
+        public async Task<ActionResult<BasePagedResponseModel<TransactionModelApi>>> GetPagedTransactionHistory([FromQuery] CashServiceRequestModel requstModel)
+        {
+            var profileClient = _grpcClientFactory.CreateClient<CashServiceClient>(nameof(CashServiceClient));
+            var token = HttpContext.RequestAborted;
+
+            var request = new GetTransactionHistoryWithFilterRequest()
+            {
+                ProfileId = requstModel.ProfileId,
+                TransactionHistoryFilter = new TransactionHistoryFilter()
+                {
+                    ColumnName = requstModel.ColumnName,
+                    OrderDirection = (OrderDirection) (requstModel.OrderDirection ?? 0),
+                    PageNumber = requstModel.PageNumber ?? -1,
+                    PageSize = requstModel.PageSize ?? -1,
+                    StartDate = Timestamp.FromDateTimeOffset(requstModel.StartDate ?? DateTimeOffset.MinValue),
+                    EndDate = Timestamp.FromDateTimeOffset(requstModel.EndDate ?? DateTimeOffset.MinValue),
+                    SearchCriteria = requstModel.SearchCriteria
+                }
+            };
+
+            var result = await profileClient.GetPagedTransactionHistoryAsync(request, cancellationToken: token);
+
+            List<TransactionModelApi> transactionModels = _mapper.Map<IEnumerable<Transaction>, List<TransactionModelApi>>(result.Transactions);
+
+            var response = new BasePagedResponseModel<TransactionModelApi>()
+            {
+                Data = transactionModels,
+                TotalCount = result.TotalCount
+            };
+
+            return Ok(new ApiResponse<BasePagedResponseModel<TransactionModelApi>>(response));
         }
 
         [HttpGet("{id}", Name = nameof(GetBalance))]

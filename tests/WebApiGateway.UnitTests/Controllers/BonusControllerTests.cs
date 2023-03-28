@@ -1,16 +1,11 @@
 ﻿using FluentAssertions;
-
+using Xunit.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using WebApiGateway.Models.API.Responses;
-using WebApiGateway.Models.AuthService;
-using WebApiGateway.Models.BonusService;
+using WebApiGateway.Models.BaseModels;
 using WebApiGateway.Models.ProfileService;
 using WebApiGateway.UnitTests.Infrastructure;
 using WebApiGateway.UnitTests.Infrastructure.Builders.BonusControllerBuilders;
-
-using Xunit.Abstractions;
 
 namespace WebApiGateway.UnitTests.Controllers
 {
@@ -81,7 +76,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<BonusPagedResponseModel>)actionResult.Value!;
+            var apiResponse = (ApiResponse<BasePagedResponseModel<DiscountModel>>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert
