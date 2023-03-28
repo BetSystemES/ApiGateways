@@ -7,14 +7,14 @@ using WebApiGateway.Models.AuthService;
 using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.Models.AuthService.Extensions;
 
-namespace WebApiGateway.UnitTests.Infrastructure.Builders;
+namespace WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
 
 public class AuthControllerBaseTestVerifierGetAllRolesBuilder : AuthControllerBaseTestVerifierBuilder<Empty, GetAllRolesResponse, IEnumerable<RoleModel>>
 {
     public override AuthControllerBaseTestVerifierBuilder<Empty, GetAllRolesResponse, IEnumerable<RoleModel>>
         SetAuthServiceClientRequest(params string[] paramsStrings)
     {
-       return this;
+        return this;
     }
 
     public override AuthControllerBaseTestVerifierBuilder<Empty, GetAllRolesResponse, IEnumerable<RoleModel>>

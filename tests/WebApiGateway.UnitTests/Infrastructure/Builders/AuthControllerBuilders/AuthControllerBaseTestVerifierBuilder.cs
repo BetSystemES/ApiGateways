@@ -15,7 +15,7 @@ using WebApiGateway.Models.AuthService.Extensions;
 using WebApiGateway.UnitTests.Infrastructure.Verifiers;
 using static AuthService.Grpc.AuthService;
 
-namespace WebApiGateway.UnitTests.Infrastructure.Builders;
+namespace WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
 
 public abstract class AuthControllerBaseTestVerifierBuilder<TRequest, TResponse, TExpectedResult>
     where TRequest : class, new()

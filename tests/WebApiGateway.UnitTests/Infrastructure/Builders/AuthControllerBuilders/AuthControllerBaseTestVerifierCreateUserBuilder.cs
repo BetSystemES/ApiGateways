@@ -3,33 +3,39 @@ using FizzWare.NBuilder;
 using Moq;
 using WebApiGateway.Models.API.Responses;
 using WebApiGateway.Models.AuthService;
-using WebApiGateway.Models.BaseModels;
 using WebApiGateway.UnitTests.Infrastructure.Builders.Extensions;
+using static WebApiGateway.UnitTests.Infrastructure.Builders.Helpers.GuidHelper;
 
-namespace WebApiGateway.UnitTests.Infrastructure.Builders;
+namespace WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
 
-public class AuthControllerBaseTestVerifierGetUserBuilder : AuthControllerBaseTestVerifierBuilder<BaseUserRequestModel, GetUserResponse, UserModel>
+public class AuthControllerBaseTestVerifierCreateUserBuilder : AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
 {
-    public override AuthControllerBaseTestVerifierBuilder<BaseUserRequestModel, GetUserResponse, UserModel>
+    public override AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
         SetAuthServiceClientRequest(params string[] paramsStrings)
     {
-        string? userId = paramsStrings.ElementAtOrDefault(0);
+        string? email = paramsStrings.ElementAtOrDefault(0);
+        string? password = paramsStrings.ElementAtOrDefault(1);
+        int rolesListSize = int.TryParse(paramsStrings.ElementAtOrDefault(2), out int result) ? result : 1;
 
-        _authServiceClientRequest = Builder<BaseUserRequestModel>
+        var roleIds = GenerateGuidList(rolesListSize);
+
+        _authServiceClientRequest = Builder<CreateUserModel>
             .CreateNew()
-            .With(x => x.UserId = string.IsNullOrEmpty(userId) ? _userId : Guid.Parse(userId))
+            .With(x => x.Email = string.IsNullOrEmpty(email) ? "user99@gmail.com" : email)
+            .With(x => x.Password = string.IsNullOrEmpty(password) ? "!Qwerty999^" : password)
+            .With(x => x.RoleIds = roleIds.Select(guid => guid.ToString()))
             .Build();
 
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BaseUserRequestModel, GetUserResponse, UserModel>
+    public override AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
         SetAuthServiceClientResponse(params string[] paramsStrings)
     {
         string? email = paramsStrings.ElementAtOrDefault(0);
         bool? isLocked = paramsStrings.ElementAtOrDefault(1).Convert<bool>();
 
-        _authServiceClientResponse = Builder<GetUserResponse>
+        _authServiceClientResponse = Builder<CreateUserResponse>
             .CreateNew()
             .With(x => x.User = Builder<User>
                 .CreateNew()
@@ -42,14 +48,14 @@ public class AuthControllerBaseTestVerifierGetUserBuilder : AuthControllerBaseTe
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BaseUserRequestModel, GetUserResponse, UserModel> 
+    public override AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
         SetupAuthServiceClientResponse()
     {
         var grpcResponse = GrpcAsyncUnaryCallBuilder(_authServiceClientResponse);
 
         _mockAuthServiceClient
-            .Setup(f => f.GetUserAsync(
-                It.IsAny<GetUserRequest>(),
+            .Setup(f => f.CreateUserAsync(
+                It.IsAny<CreateUserRequest>(),
                 null,
                 null,
                 It.IsAny<CancellationToken>()))
@@ -59,7 +65,7 @@ public class AuthControllerBaseTestVerifierGetUserBuilder : AuthControllerBaseTe
         return this;
     }
 
-    public override AuthControllerBaseTestVerifierBuilder<BaseUserRequestModel, GetUserResponse, UserModel>
+    public override AuthControllerBaseTestVerifierBuilder<CreateUserModel, CreateUserResponse, UserModel>
         SetExpectedResult(params string[] paramsStrings)
     {
         string? email = paramsStrings.ElementAtOrDefault(0);

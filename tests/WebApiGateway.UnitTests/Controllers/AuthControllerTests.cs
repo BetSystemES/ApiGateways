@@ -7,6 +7,8 @@ using WebApiGateway.Models.AuthService;
 using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.UnitTests.Infrastructure;
 using WebApiGateway.UnitTests.Infrastructure.Builders;
+using WebApiGateway.UnitTests.Infrastructure.Builders.AuthControllerBuilders;
+
 using Xunit.Abstractions;
 
 namespace WebApiGateway.UnitTests.Controllers;
