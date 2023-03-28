@@ -196,6 +196,48 @@ public class AuthControllerTests : BaseTest
 
     [Fact]
     [Trait(Constants.Category, Constants.UnitTest)]
+    public async void DeleteUserTest()
+    {
+        // Arrange
+        var userId = Guid.NewGuid();
+
+        var verifier = new AuthControllerBaseTestVerifierDeleteUserBuilder()
+            .Prepare()
+            .SetUserId(userId)
+            .SetAuthServiceClientRequest()
+            .SetAuthServiceClientResponse()
+            .SetupAuthServiceClientResponse()
+            .SetupAuthServiceClientGrpcFactory()
+            .SetExpectedResult()
+            .Build();
+
+        // Act
+        var result = await verifier.AuthController.DeleteUser(verifier.RequestModel);
+        result.Result.Should().NotBeNull();
+
+        Logger.LogInformation($"AuthController.DeleteUser result: {Serialize(result)}");
+
+        var actionResult = (ObjectResult)result.Result!;
+        actionResult.Value.Should().NotBeNull();
+
+        Logger.LogInformation($"actionResult result: {Serialize(actionResult)}");
+
+        var apiResponse = (ApiResponse<string>)actionResult.Value!;
+        apiResponse.Should().NotBeNull();
+
+        Logger.LogInformation($"apiResponse result: {Serialize(apiResponse)}");
+        Logger.LogInformation($"verifier.ExpectedResult result: {Serialize(verifier.ExpectedResult)}");
+
+        // Assert
+        verifier
+            .VerifyGrpcClientFactoryCreateClient()
+            .VerifyAuthServiceClientDeleteUserAsync();
+
+        verifier.ExpectedResult.Data.Should().NotBeNull();
+    }
+
+    [Fact]
+    [Trait(Constants.Category, Constants.UnitTest)]
     public async void GetAllRolesTest()
     {
         // Arrange

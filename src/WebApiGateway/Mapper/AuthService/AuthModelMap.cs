@@ -17,6 +17,16 @@ namespace WebApiGateway.Mapper.AuthService
             CreateMap<CreateUserModel, CreateUserRequest>()
                 .ReverseMap();
 
+            CreateMap<DeleteUserRequest, DeleteUserModel>()
+                .ForMember(dest => dest.UserId,
+                    opt =>
+                        opt.MapFrom(src => Guid.Parse(src.UserId)));
+
+            CreateMap<DeleteUserModel, DeleteUserRequest>()
+                .ForMember(dest => dest.UserId,
+                    opt =>
+                        opt.MapFrom(src => src.UserId.ToString()));
+
             CreateMap<UserModel, User>()
                 .ReverseMap();
 

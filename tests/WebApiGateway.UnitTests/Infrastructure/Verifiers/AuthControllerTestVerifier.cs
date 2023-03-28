@@ -87,6 +87,18 @@ public class AuthControllerTestVerifier<TRequest, TExpectedResult>
         return this;
     }
 
+    public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientDeleteUserAsync()
+    {
+        AuthServiceClient
+            .Verify(f => f.DeleteUserAsync(
+                It.IsAny<DeleteUserRequest>(),
+                null,
+                null,
+                It.IsAny<CancellationToken>()), Times.Once());
+
+        return this;
+    }
+
     public AuthControllerTestVerifier<TRequest, TExpectedResult> VerifyAuthServiceClientGetAllRolesAsync()
     {
         AuthServiceClient
