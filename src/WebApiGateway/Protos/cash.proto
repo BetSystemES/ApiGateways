@@ -107,4 +107,5 @@ message TransactionHistoryFilter {
 	double endAmount = 8;
 	google.protobuf.Timestamp start_date = 9;
 	google.protobuf.Timestamp end_date = 10;
+	string search_criteria = 11;
 }
