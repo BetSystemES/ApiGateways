@@ -35,7 +35,7 @@ namespace WebApiGateway.AppDependencies
                 .AddCallCredentialsToClient(serviceEndpointsSettings.IsUseTokenTransfer);
         }
 
-        private static IHttpClientBuilder AddGrpcServiceClient<TClient>(this IServiceCollection services, 
+        private static IHttpClientBuilder AddGrpcServiceClient<TClient>(this IServiceCollection services,
             string clientName, string endpoint) where TClient : class
         {
             return services
@@ -47,7 +47,6 @@ namespace WebApiGateway.AppDependencies
                         channelOptions.ServiceConfig = new ServiceConfig { MethodConfigs = { DefaultMethodConfig } };
                         channelOptions.UnsafeUseInsecureChannelCallCredentials = true;
                     });
-
                 });
         }
 

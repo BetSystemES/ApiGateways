@@ -1,8 +1,8 @@
-﻿using System.Net;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.SecurityTokenService;
 using Newtonsoft.Json;
+using System.Net;
 using WebApiGateway.Middleware.Extensions;
 using WebApiGateway.Models.API.Responses;
 

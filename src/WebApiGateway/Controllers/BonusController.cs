@@ -68,7 +68,7 @@ namespace WebApiGateway.Controllers
                 {
                     ColumnName = requstModel.ColumnName,
                     IsEnabled = requstModel.IsEnabled.ToString(),
-                    OrderDirection = (OrderDirection) (requstModel.OrderDirection ?? 0),
+                    OrderDirection = (OrderDirection)(requstModel.OrderDirection ?? 0),
                     PageNumber = requstModel.PageNumber ?? -1,
                     PageSize = requstModel.PageSize ?? -1,
                     StartDate = Timestamp.FromDateTimeOffset(requstModel.StartDate ?? DateTimeOffset.MinValue),

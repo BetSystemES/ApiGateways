@@ -2,7 +2,7 @@
 
 namespace WebApiGateway.Mapper.Extensions
 {
-    public  static class Converters
+    public static class Converters
     {
         public static Timestamp ToTimestamp(this DateTimeOffset dateTimeOffset)
         {
