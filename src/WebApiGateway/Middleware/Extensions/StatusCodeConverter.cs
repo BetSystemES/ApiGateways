@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using static Grpc.Core.StatusCode;
 
-namespace WebApiGateway.Middleware.Extensisons;
+namespace WebApiGateway.Middleware.Extensions;
 
 public static class Extension
 {

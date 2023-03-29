@@ -3,7 +3,7 @@ using Grpc.Core;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.IdentityModel.SecurityTokenService;
 using Newtonsoft.Json;
-using WebApiGateway.Middleware.Extensisons;
+using WebApiGateway.Middleware.Extensions;
 using WebApiGateway.Models.API.Responses;
 
 namespace WebApiGateway.Middleware
