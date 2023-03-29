@@ -1,6 +1,4 @@
-﻿using AuthService.Grpc;
-
-using Grpc.Net.ClientFactory;
+﻿using Grpc.Net.ClientFactory;
 
 using Moq;
 
