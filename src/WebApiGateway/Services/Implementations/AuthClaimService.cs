@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using Microsoft.Net.Http.Headers;
+﻿using Microsoft.Net.Http.Headers;
+using System.Security.Claims;
 using WebApiGateway.Configuration.Jwt;
 using WebApiGateway.Models.AuthService.Enums;
 using WebApiGateway.Models.AuthService.Extensions;

@@ -58,12 +58,11 @@ namespace WebApiGateway.Controllers
                 TransactionHistoryFilter = new TransactionHistoryFilter()
                 {
                     ColumnName = requstModel.ColumnName,
-                    OrderDirection = (OrderDirection) (requstModel.OrderDirection ?? 0),
+                    OrderDirection = (OrderDirection)(requstModel.OrderDirection ?? 0),
                     PageNumber = requstModel.PageNumber ?? -1,
                     PageSize = requstModel.PageSize ?? -1,
                     StartDate = Timestamp.FromDateTimeOffset(requstModel.StartDate ?? DateTimeOffset.MinValue),
                     EndDate = Timestamp.FromDateTimeOffset(requstModel.EndDate ?? DateTimeOffset.MinValue),
-                    SearchCriteria = requstModel.SearchCriteria
                 }
             };
 
