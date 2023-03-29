@@ -1,4 +1,5 @@
 using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,7 @@ namespace WebApiGateway.Controllers
 
         [HttpGet("get-paged-discounts")]
         [SwaggerResponse(200, "Successfully get bonus(es)", typeof(List<DiscountModel>))]
-        public async Task<ActionResult<BonusPagedResponseModel>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
+        public async Task<ActionResult<BasePagedResponseModel<DiscountModel>>> GetPagedDiscounts([FromQuery] BonusServiceRequestModel requstModel)
         {
             var profileClient = _grpcClientFactory.CreateClient<ProfileServiceClient>(nameof(ProfileServiceClient));
             var token = HttpContext.RequestAborted;
@@ -67,9 +68,11 @@ namespace WebApiGateway.Controllers
                 {
                     ColumnName = requstModel.ColumnName,
                     IsEnabled = requstModel.IsEnabled.ToString(),
-                    OrderDirection = requstModel.OrderDirection ?? 0,
+                    OrderDirection = (OrderDirection) (requstModel.OrderDirection ?? 0),
                     PageNumber = requstModel.PageNumber ?? -1,
                     PageSize = requstModel.PageSize ?? -1,
+                    StartDate = Timestamp.FromDateTimeOffset(requstModel.StartDate ?? DateTimeOffset.MinValue),
+                    EndDate = Timestamp.FromDateTimeOffset(requstModel.EndDate ?? DateTimeOffset.MinValue),
                     SearchCriteria = requstModel.SearchCriteria
                 }
             };
@@ -78,13 +81,13 @@ namespace WebApiGateway.Controllers
 
             List<DiscountModel> discountModels = _mapper.Map<IEnumerable<Discount>, List<DiscountModel>>(result.Discounts);
 
-            var response = new BonusPagedResponseModel()
+            var response = new BasePagedResponseModel<DiscountModel>()
             {
                 Data = discountModels,
                 TotalCount = result.TotalCount
             };
 
-            return Ok(new ApiResponse<BonusPagedResponseModel>(response));
+            return Ok(new ApiResponse<BasePagedResponseModel<DiscountModel>>(response));
         }
 
         // POST api/bonus
