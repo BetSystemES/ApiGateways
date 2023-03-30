@@ -68,7 +68,7 @@ namespace WebApiGateway.Controllers
 
             var result = await profileClient.GetPagedTransactionHistoryAsync(request, cancellationToken: token);
 
-            List<TransactionModelApi> transactionModels = _mapper.Map<IEnumerable<Transaction>, List<TransactionModelApi>>(result.Transactions);
+            List<TransactionModelApi> transactionModels = _mapper.Map<IEnumerable<TransactionModel>, List<TransactionModelApi>>(result.Transactions);
 
             var response = new BasePagedResponseModel<TransactionModelApi>()
             {

@@ -32,7 +32,7 @@ message GetTransactionHistoryWithFilterRequest {
 }
 message GetPagedTransactionsHistoryResponse {
 	int32 total_count = 1;
-	repeated Transaction transactions = 2;
+	repeated TransactionModel transactions = 2;
 }
 
 message GetBalanceRequest {

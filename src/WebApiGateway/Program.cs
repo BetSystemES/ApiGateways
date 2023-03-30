@@ -1,4 +1,5 @@
-﻿using WebApiGateway.AppDependencies;
+﻿using Newtonsoft.Json;
+using WebApiGateway.AppDependencies;
 using WebApiGateway.Configuration;
 using WebApiGateway.Configuration.Jwt;
 using WebApiGateway.Filters;
@@ -15,7 +16,8 @@ var jwtConfig = builder.GetAppSettings<JwtConfig>();
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<ValidateModelFilter>();
-});
+})
+    .AddNewtonsoftJson(options => options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
