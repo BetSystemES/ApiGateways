@@ -2,9 +2,8 @@
 
 namespace WebApiGateway.Models.CashService
 {
-    public class TransactionApi
-    {
-        public string TransactionId { get; set; }
+    public class TransactionCreateModel
+    {   
         public CashTypeApi CashType { get; set; }
         public double Amount { get; set; }
     }

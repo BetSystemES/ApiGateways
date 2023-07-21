@@ -2,7 +2,9 @@
 using WebApiGateway.Services.Contracts;
 using WebApiGateway.Settings;
 using static AuthService.Grpc.AuthService;
+using static BetService.Grpc.BetService;
 using static CashService.GRPC.CashService;
+using static CompetitionService.Grpc.CompetitionService;
 using static ProfileService.GRPC.ProfileService;
 using static WebApiGateway.Configuration.GrpcRetryPolicyConfiguration;
 
@@ -16,6 +18,8 @@ namespace WebApiGateway.AppDependencies
             services
                 .AddGrpcClient<ProfileServiceClient>(serviceEndpointsSettings)
                 .AddGrpcClient<CashServiceClient>(serviceEndpointsSettings)
+                .AddGrpcClient<CompetitionServiceClient>(serviceEndpointsSettings)
+                .AddGrpcClient<BetServiceClient>(serviceEndpointsSettings)
                 .AddGrpcClient<AuthServiceClient>(serviceEndpointsSettings);
             return services;
         }

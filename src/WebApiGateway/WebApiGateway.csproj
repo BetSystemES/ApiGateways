@@ -13,6 +13,8 @@
 		<Protobuf Include="Protos\profile.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\cash.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\auth_service.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\competition_service.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\bet_service.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,6 +26,7 @@
 		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
 		<PackageReference Include="Grpc.AspNetCore" Version="2.45.0" />
 		<PackageReference Include="Grpc.Net.ClientFactory" Version="2.47.0" />
+		<PackageReference Include="Microsoft.AspNet.WebApi.Cors" Version="5.2.9" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.15" />
 		<PackageReference Include="Microsoft.IdentityModel" Version="7.0.0" />

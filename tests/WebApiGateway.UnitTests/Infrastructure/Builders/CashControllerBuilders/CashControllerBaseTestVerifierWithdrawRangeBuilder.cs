@@ -6,14 +6,14 @@ using WebApiGateway.Models.CashService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
 {
-    public class CashControllerBaseTestVerifierWithdrawRangeBuilder : CashControllerBaseTestVerifierBuilder<List<TransactionModelApi>, WithdrawRangeResponse, List<TransactionModelApi>>
+    public class CashControllerBaseTestVerifierWithdrawRangeBuilder : CashControllerBaseTestVerifierBuilder<List<TransactionModelCreateModel>, WithdrawRangeResponse, List<TransactionModelCreateModel>>
     {
-        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelApi>, WithdrawRangeResponse, List<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelCreateModel>, WithdrawRangeResponse, List<TransactionModelCreateModel>>
             SetProfileServiceClientRequest(params string[] paramsStrings)
         {
             string? userId = paramsStrings.ElementAtOrDefault(0);
 
-            _cashServiceClientRequest = Builder<TransactionModelApi>
+            _cashServiceClientRequest = Builder<TransactionModelCreateModel>
                 .CreateListOfSize(3)
                 .All()
                 .With(x => x.ProfileId = userId ?? Guid.NewGuid().ToString())
@@ -23,7 +23,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelApi>, WithdrawRangeResponse, List<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelCreateModel>, WithdrawRangeResponse, List<TransactionModelCreateModel>>
             SetProfileServiceClientResponse(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
@@ -51,7 +51,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelApi>, WithdrawRangeResponse, List<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelCreateModel>, WithdrawRangeResponse, List<TransactionModelCreateModel>>
             SetupProfileServiceClientResponse()
         {
             var grpcResponse = GrpcAsyncUnaryCallBuilder(_cashServiceClientResponse);
@@ -68,24 +68,24 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelApi>, WithdrawRangeResponse, List<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<List<TransactionModelCreateModel>, WithdrawRangeResponse, List<TransactionModelCreateModel>>
             SetExpectedResult(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
 
-            var transactionApis = Builder<TransactionApi>
+            var transactionApis = Builder<TransactionCreateModel>
                 .CreateListOfSize(3)
                 .All()
                 .With(x => x.TransactionId = id ?? Guid.NewGuid().ToString())
                 .Build();
 
-            var transactionModelApi = Builder<TransactionModelApi>
+            var transactionModelApi = Builder<TransactionModelCreateModel>
                 .CreateListOfSize(3)
                 .All()
                 .With(x => x.TransactionApis = transactionApis.ToList())
                 .Build();
 
-            _expectedResult = Builder<ApiResponse<List<TransactionModelApi>>>
+            _expectedResult = Builder<ApiResponse<List<TransactionModelCreateModel>>>
                 .CreateNew()
                 .With(x => x.Data = transactionModelApi.ToList())
                 .Build();

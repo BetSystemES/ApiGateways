@@ -1,5 +1,7 @@
 ﻿using WebApiGateway.Mapper.AuthService;
+using WebApiGateway.Mapper.BetService;
 using WebApiGateway.Mapper.CashService;
+using WebApiGateway.Mapper.CompetitionSerivce;
 using WebApiGateway.Mapper.ProfileService;
 
 namespace WebApiGateway.Configuration
@@ -14,6 +16,8 @@ namespace WebApiGateway.Configuration
                 config.AddProfile<DiscountModelMap>();
                 config.AddProfile<TransactionModelApiMap>();
                 config.AddProfile<AuthProfile>();
+                config.AddProfile<CompetitionServiceProfile>();
+                config.AddProfile<BetServiceProfile>();
             });
 
             return services;

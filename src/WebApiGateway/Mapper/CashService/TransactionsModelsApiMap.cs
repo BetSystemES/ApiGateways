@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using CashService.GRPC;
+using Google.Protobuf.WellKnownTypes;
+using WebApiGateway.Mapper.Extensions;
 using WebApiGateway.Models.CashService;
 using WebApiGateway.Models.CashService.Enums;
+using WebApiGateway.Models.CashService.ViewModel;
 
 namespace WebApiGateway.Mapper.CashService
 {
@@ -10,20 +13,33 @@ namespace WebApiGateway.Mapper.CashService
         /// <summary>Initializes a new instance of the <see cref="TransactionModelApiMap" /> class.</summary>
         public TransactionModelApiMap()
         {
-            CreateMap<Transaction, TransactionApi>().ReverseMap();
+            CreateMap<DateTimeOffset, Timestamp>()
+                .ConvertUsing((x, res) => res = x.ToTimestamp());
+            CreateMap<Timestamp, DateTimeOffset>()
+                .ConvertUsing((x, res) => res = x.ToDateTimeOffset());
 
-            CreateMap<TransactionModel, TransactionModelApi>().ReverseMap();
+            CreateMap<Transaction, TransactionCreateModel>()
+                .ReverseMap()
+                .Ignore(e => e.Id);
 
-            CreateMap<TransactionModelApi, TransactionModel>()
-                .ForMember(x => x.Transactions, y => y.MapFrom(z => z.TransactionApis))
+            CreateMap<TransactionModel, TransactionModelCreateModel>()
                 .ReverseMap();
 
-            CreateMap<Guid, string>()
-                .ConvertUsing(s => s.ToString());
-            CreateMap<string, Guid>()
-                .ConvertUsing(s => Guid.Parse(s));
+            CreateMap<TransactionModelCreateModel, TransactionModel>()
+                .ForMember(x => x.Transactions, y => y.MapFrom(z => z.TransactionApis))
+                .Ignore(e => e.Amount)
+                .ReverseMap();
 
-            CreateMap<CashType, CashTypeApi>().ReverseMap();
+            CreateMap<CashType, CashTypeApi>()
+                .ReverseMap();
+
+            CreateMap<TransactionViewModel, Transaction>()
+                .ReverseMap();
+
+            CreateMap<TransactionModel, TransactionModelViewModel>()
+                .ReverseMap()
+                .Ignore(e => e.Amount)
+                .Ignore(e => e.ProfileId);
         }
     }
 }

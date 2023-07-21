@@ -38,7 +38,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<TransactionModelApi>)actionResult.Value!;
+            var apiResponse = (ApiResponse<TransactionModelCreateModel>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert
@@ -76,7 +76,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<BasePagedResponseModel<TransactionModelApi>>)actionResult.Value!;
+            var apiResponse = (ApiResponse<BasePagedResponseModel<TransactionModelCreateModel>>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert
@@ -113,7 +113,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<TransactionModelApi>)actionResult.Value!;
+            var apiResponse = (ApiResponse<TransactionModelCreateModel>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert
@@ -171,7 +171,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<TransactionModelApi>)actionResult.Value!;
+            var apiResponse = (ApiResponse<TransactionModelCreateModel>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert
@@ -229,7 +229,7 @@ namespace WebApiGateway.UnitTests.Controllers
             var actionResult = (ObjectResult)result.Result!;
             actionResult.Should().NotBeNull();
 
-            var apiResponse = (ApiResponse<IEnumerable<TransactionModelApi>>)actionResult.Value!;
+            var apiResponse = (ApiResponse<IEnumerable<TransactionModelCreateModel>>)actionResult.Value!;
             apiResponse.Should().NotBeNull();
 
             // Assert

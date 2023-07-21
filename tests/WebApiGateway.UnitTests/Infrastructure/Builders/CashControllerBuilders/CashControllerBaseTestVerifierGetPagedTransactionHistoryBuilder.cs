@@ -7,9 +7,9 @@ using WebApiGateway.Models.CashService;
 
 namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
 {
-    public class CashControllerBaseTestVerifierGetPagedTransactionHistoryBuilder : CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelApi>>
+    public class CashControllerBaseTestVerifierGetPagedTransactionHistoryBuilder : CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelCreateModel>>
     {
-        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelCreateModel>>
             SetProfileServiceClientRequest(params string[] paramsStrings)
         {
             string? userId = paramsStrings.ElementAtOrDefault(0);
@@ -22,7 +22,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelCreateModel>>
             SetProfileServiceClientResponse(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
@@ -49,7 +49,7 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelCreateModel>>
             SetupProfileServiceClientResponse()
         {
             var grpcResponse = GrpcAsyncUnaryCallBuilder(_cashServiceClientResponse);
@@ -66,28 +66,28 @@ namespace WebApiGateway.UnitTests.Infrastructure.Builders.CashControllerBuilders
             return this;
         }
 
-        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelApi>>
+        public override CashControllerBaseTestVerifierBuilder<CashServiceRequestModel, GetPagedTransactionsHistoryResponse, BasePagedResponseModel<TransactionModelCreateModel>>
             SetExpectedResult(params string[] paramsStrings)
         {
             string? id = paramsStrings.ElementAtOrDefault(0);
             string? userId = paramsStrings.ElementAtOrDefault(1);
 
-            var transactionApis = Builder<TransactionApi>
+            var transactionApis = Builder<TransactionCreateModel>
                 .CreateListOfSize(3)
                 .All()
                 .With(x => x.TransactionId = id ?? Guid.NewGuid().ToString())
                 .Build();
 
-            var transactionModelApi = Builder<TransactionModelApi>
+            var transactionModelApi = Builder<TransactionModelCreateModel>
                 .CreateListOfSize(3)
                 .All()
                 .With(x => x.ProfileId = userId ?? Guid.NewGuid().ToString())
                 .With(x => x.TransactionApis = transactionApis.ToList())
                 .Build();
 
-            _expectedResult = Builder<ApiResponse<BasePagedResponseModel<TransactionModelApi>>>
+            _expectedResult = Builder<ApiResponse<BasePagedResponseModel<TransactionModelCreateModel>>>
                 .CreateNew()
-                .With(x => x.Data = Builder<BasePagedResponseModel<TransactionModelApi>>
+                .With(x => x.Data = Builder<BasePagedResponseModel<TransactionModelCreateModel>>
                     .CreateNew()
                     .With(y => y.Data = transactionModelApi.ToList())
                     .Build())

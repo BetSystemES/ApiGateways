@@ -8,16 +8,23 @@ package cash;
 
 // The CashService definition.
 service CashService {
-
+  rpc CreateCashProfile (CreateCashProfileRequest) returns (CreateCashProfileResponse);
   rpc GetTransactionsHistory (GetTransactionsHistoryRequest) returns (GetTransactionsHistoryResponse);
   rpc GetPagedTransactionHistory (GetTransactionHistoryWithFilterRequest) returns (GetPagedTransactionsHistoryResponse);
   rpc GetBalance (GetBalanceRequest) returns (GetBalanceResponse);
+  rpc CalcBalanceWithinCashtype (CalcBalanceWithinCashtypeRequest) returns (CalcBalanceWithinCashtypeResponse);
   rpc Deposit (DepositRequest) returns (DepositResponse);
   rpc Withdraw (WithdrawRequest) returns (WithdrawResponse);
   rpc DepositRange (DepositRangeRequest) returns (DepositRangeResponse);
   rpc WithdrawRange (WithdrawRangeRequest) returns (WithdrawRangeResponse);
 }
 
+message CreateCashProfileRequest {
+	string user_id = 1;
+}
+
+message CreateCashProfileResponse {
+}
 
 message GetTransactionsHistoryRequest {
 	string profile_id = 1;
@@ -39,17 +46,27 @@ message GetBalanceRequest {
 	string profile_id = 1;
 }
 message GetBalanceResponse {
+	string profile_id = 1;
+	double balance = 2;
+}
+
+message CalcBalanceWithinCashtypeRequest {
+	string profile_id = 1;
+}
+
+message CalcBalanceWithinCashtypeResponse {
 	TransactionModel balance = 1;
 }
 
 message DepositRequest {
-	TransactionModel deposit = 1;
+	TransactionRequestModel deposit = 1;
 }
 message DepositResponse {
+	TransactionModel depositresponse = 1;
 }
 
 message WithdrawRequest {
-	TransactionModel withdrawrequest = 1;
+	TransactionRequestModel withdrawrequest = 1;
 }
 message WithdrawResponse {
 	TransactionModel withdrawresponse = 1;
@@ -72,12 +89,26 @@ message WithdrawRangeResponse {
 message TransactionModel
 {
 	string profile_id = 1;
+	double amount = 2;
+	repeated Transaction transactions = 3;
+}
+
+message TransactionRequestModel
+{
+	string profile_id = 1;
 	repeated Transaction transactions = 2;
+}
+
+message TransactionResponseModel
+{
+	string profile_id = 1;
+	double cash_amount = 2;
+	repeated Transaction transactions = 3;
 }
 
 message Transaction
 {
-	string transaction_id = 1; 
+	string id = 1; 
 	CashType cash_type = 2;
 	double amount = 3;
 	google.protobuf.Timestamp date = 4;
@@ -107,5 +138,4 @@ message TransactionHistoryFilter {
 	double endAmount = 8;
 	google.protobuf.Timestamp start_date = 9;
 	google.protobuf.Timestamp end_date = 10;
-	string search_criteria = 11;
 }
